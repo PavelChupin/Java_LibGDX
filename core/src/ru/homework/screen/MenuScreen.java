@@ -44,19 +44,6 @@ public class MenuScreen extends BaseScreen {
         actionObject(this.pos);
     }
 
-    private void actionObject(Vector2 obj) {
-        if ((speed.x < 0 && obj.x > posTo.x)
-                || (speed.x > 0 && obj.x < posTo.x)
-                || (speed.y < 0 && obj.y > posTo.y)
-                || (speed.y > 0 && obj.y < posTo.y)
-        ) {
-            obj.add(speed);
-        }
-        //    if (/*!pos.equals(posTo) ||*/ (pos.x < posTo.x && pos.y < posTo.y)) {
-        //   pos.add(speed);
-        //}
-    }
-
     @Override
     public void dispose() {
         img.dispose();
@@ -118,5 +105,18 @@ public class MenuScreen extends BaseScreen {
         }
         speed.set(posTo).nor().scl(v);
         //System.out.println(speed);
+    }
+
+    private void actionObject(Vector2 obj) {
+        if ((speed.x < 0 && obj.x > posTo.x)
+                || (speed.x > 0 && obj.x < posTo.x)
+                || (speed.y < 0 && obj.y > posTo.y)
+                || (speed.y > 0 && obj.y < posTo.y)
+        ) {
+            obj.add(speed);
+        }
+        //    if (/*!pos.equals(posTo) ||*/ (pos.x < posTo.x && pos.y < posTo.y)) {
+        //   pos.add(speed);
+        //}
     }
 }
