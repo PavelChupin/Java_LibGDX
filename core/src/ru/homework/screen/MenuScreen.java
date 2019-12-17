@@ -19,7 +19,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        logotip = new Logotip("badlogic.jpg",DIST);
+        logotip = new Logotip("badlogic.jpg");
         //img = new Texture("badlogic.jpg");
         backGround = new Texture("textures/starBackGround.jpg");
         //pos = new Vector2();

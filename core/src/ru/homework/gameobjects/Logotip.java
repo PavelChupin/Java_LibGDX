@@ -4,8 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class Logotip {
+    private static final float DIST = 10f;
+
     //Смещение при передвижении на клавиатуре
-    private float dist = 10f;
+    private float dist;
 
     private Texture img;
     //Текущая позиция
@@ -15,12 +17,23 @@ public class Logotip {
     //Скорость перемещения
     private Vector2 speed;
 
-    public Logotip(String img, float dist) {
-        this.img = new Texture(img);
+    public Logotip(){
         this.pos = new Vector2();
         this.posTo = new Vector2();
         this.speed = new Vector2();
+    }
+
+    public Logotip(String img) {
+        this();
+        this.img = new Texture(img);
+        this.dist = DIST;
+    }
+
+    public Logotip(String img, float dist) {
+        this();
+        this.img = new Texture(img);
         this.dist = dist;
+
     }
 
 
