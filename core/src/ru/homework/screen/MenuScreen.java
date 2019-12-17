@@ -96,14 +96,15 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void calcSpeed(Vector2 obj) {
-        Vector2 v = new Vector2(1, 1);
+        /*Vector2 v = new Vector2(1, 1);
         if (posTo.x < obj.x) {
             v.x = -1;
         }
         if (posTo.y < obj.y) {
             v.y = -1;
-        }
-        speed.set(posTo).nor().scl(v);
+        }*/
+        //speed.set(posTo).nor().scl(v);
+        speed.set(posTo).sub(obj).nor();
         //System.out.println(speed);
     }
 
