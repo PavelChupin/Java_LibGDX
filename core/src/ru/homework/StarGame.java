@@ -1,32 +1,37 @@
 package ru.homework;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import ru.homework.screen.MenuScreen;
 
-public class StarGame extends ApplicationAdapter {
-    SpriteBatch batch;
+public class StarGame extends Game {
+    /*SpriteBatch batch;
     Texture img;
     Texture backGround;
     //TextureRegion region;
+    */
+
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
+         setScreen(new MenuScreen());
+       /* batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
         backGround = new Texture("starBackGround.jpg");
         //region = new TextureRegion(img,20,20,100,80);
 
         //Операции с векторами
-        opersWithVector();
+        opersWithVector();*/
     }
 
 
-    @Override
+    /*@Override
     public void render() {
         Gdx.gl.glClearColor(0.2f, 0.6f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -39,14 +44,15 @@ public class StarGame extends ApplicationAdapter {
         //batch.draw(img, 10, 10);
         //batch.draw(region,300,300);
         batch.end();
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void dispose() {
         batch.dispose();
         img.dispose();
-    }
-
+        backGround.dispose();
+    }*/
+/*
     private void opersWithVector() {
         Vector2 v1 = new Vector2(1,1);
         Vector2 v2 = new Vector2(1,2);
@@ -88,5 +94,5 @@ public class StarGame extends ApplicationAdapter {
         v1.nor();
         v2.nor();
         System.out.println(Math.acos(v1.dot(v2)));
-    }
+    }*/
 }
