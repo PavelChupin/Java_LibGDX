@@ -68,21 +68,29 @@ public class MenuScreen extends BaseScreen {
         System.out.println("keyDown keycode = " + keycode);
         switch (keycode) {
             case Input.Keys.DOWN: {
+                //Перехватим картинку
+                posTo.set(pos);
                 posTo.y -= DIST;
                 calcSpeed(this.pos);
                 break;
             }
             case Input.Keys.UP: {
+                //Перехватим картинку
+                posTo.set(pos);
                 posTo.y += DIST;
                 calcSpeed(this.pos);
                 break;
             }
             case Input.Keys.LEFT: {
+                //Перехватим картинку
+                posTo.set(pos);
                 posTo.x -= DIST;
                 calcSpeed(this.pos);
                 break;
             }
             case Input.Keys.RIGHT: {
+                //Перехватим картинку
+                posTo.set(pos);
                 posTo.x += DIST;
                 calcSpeed(this.pos);
                 break;
