@@ -71,7 +71,7 @@ public class MenuScreen extends BaseScreen {
         //Задаем точку до которой требуется двигаться
         posTo.set(screenX, Gdx.graphics.getHeight() - screenY);
         //Рассчитываем вектор скорости
-        calcSpeed();
+        calcSpeed(this.pos);
         //pos.set(screenX,Gdx.graphics.getHeight() - screenY);
         return false;
     }
@@ -82,22 +82,22 @@ public class MenuScreen extends BaseScreen {
         switch (keycode) {
             case Input.Keys.DOWN: {
                 posTo.y -= DIST;
-                calcSpeed();
+                calcSpeed(this.pos);
                 break;
             }
             case Input.Keys.UP: {
                 posTo.y += DIST;
-                calcSpeed();
+                calcSpeed(this.pos);
                 break;
             }
             case Input.Keys.LEFT: {
                 posTo.x -= DIST;
-                calcSpeed();
+                calcSpeed(this.pos);
                 break;
             }
             case Input.Keys.RIGHT: {
                 posTo.x += DIST;
-                calcSpeed();
+                calcSpeed(this.pos);
                 break;
             }
             default: {
@@ -108,12 +108,12 @@ public class MenuScreen extends BaseScreen {
         return false;//super.keyDown(keycode);
     }
 
-    private void calcSpeed() {
+    private void calcSpeed(Vector2 obj) {
         Vector2 v = new Vector2(1, 1);
-        if (posTo.x < pos.x) {
+        if (posTo.x < obj.x) {
             v.x = -1;
         }
-        if (posTo.y < pos.y) {
+        if (posTo.y < obj.y) {
             v.y = -1;
         }
         speed.set(posTo).nor().scl(v);
