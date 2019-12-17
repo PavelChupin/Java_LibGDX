@@ -20,7 +20,7 @@ public class MenuScreen extends BaseScreen {
 
         img = new Texture("badlogic.jpg");
         backGround = new Texture("textures/starBackGround.jpg");
-        pos= new Vector2();
+        pos = new Vector2();
         speed = new Vector2(0.5f,0.5f);
     }
 
