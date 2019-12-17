@@ -4,26 +4,27 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.BaseScreen;
+import ru.homework.gameobjects.Logotip;
 
 public class MenuScreen extends BaseScreen {
     private static final float DIST = 10f;
-    private Texture img;
+    //private Texture img;
+    private Logotip logotip;
     private Texture backGround;
-    private Vector2 pos;
-    private Vector2 posTo;
-    private Vector2 speed;
+    //private Vector2 pos;
+    //private Vector2 posTo;
+    //private Vector2 speed;
 
     @Override
     public void show() {
         super.show();
-
-        img = new Texture("badlogic.jpg");
+        logotip = new Logotip("badlogic.jpg",DIST);
+        //img = new Texture("badlogic.jpg");
         backGround = new Texture("textures/starBackGround.jpg");
-        pos = new Vector2();
-        posTo = new Vector2();
-        speed = new Vector2();
+        //pos = new Vector2();
+        //posTo = new Vector2();
+        //speed = new Vector2();
     }
 
     @Override
@@ -37,16 +38,16 @@ public class MenuScreen extends BaseScreen {
         batch.draw(backGround, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //batch.setColor(0.3f,0.5f,0.6f,1f);
-        batch.draw(img, pos.x, pos.y);
+        batch.draw(logotip.getImg(), logotip.getPos().x, logotip.getPos().y);
         //batch.draw(region,300,300);
         batch.end();
 
-        actionObject(this.pos);
+        logotip.actionObject();
     }
 
     @Override
     public void dispose() {
-        img.dispose();
+        logotip.dispose();
         backGround.dispose();
 
         super.dispose();
@@ -55,10 +56,12 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         System.out.println("touchDown screenX = " + screenX + " screenY " + screenY + " pointer " + pointer + " button " + button);
+
         //Задаем точку до которой требуется двигаться
-        posTo.set(screenX, Gdx.graphics.getHeight() - screenY);
-        //Рассчитываем вектор скорости
-        calcSpeed(this.pos);
+        logotip.getPosTo().set(screenX, Gdx.graphics.getHeight() - screenY);
+        //Рассчитываем вектор скорости для объекта
+        logotip.calcSpeed();
+
         //pos.set(screenX,Gdx.graphics.getHeight() - screenY);
         return false;
     }
@@ -66,51 +69,39 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean keyDown(int keycode) {
         System.out.println("keyDown keycode = " + keycode);
+
+        //Перехватим движение объекта в текущей точке
+        logotip.stopActionObject();
+
         switch (keycode) {
             case Input.Keys.DOWN: {
-                //Перехватим картинку
-                posTo.set(pos);
-                posTo.y -= DIST;
-                calcSpeed(this.pos);
+                logotip.getPosTo().y -= logotip.getDist();
+                logotip.calcSpeed();
                 break;
             }
             case Input.Keys.UP: {
-                //Перехватим картинку
-                posTo.set(pos);
-                posTo.y += DIST;
-                calcSpeed(this.pos);
+                logotip.getPosTo().y += logotip.getDist();;
+                logotip.calcSpeed();
                 break;
             }
             case Input.Keys.LEFT: {
-                //Перехватим картинку
-                posTo.set(pos);
-                posTo.x -= DIST;
-                calcSpeed(this.pos);
+                logotip.getPosTo().x -= logotip.getDist();;
+                logotip.calcSpeed();
                 break;
             }
             case Input.Keys.RIGHT: {
-                //Перехватим картинку
-                posTo.set(pos);
-                posTo.x += DIST;
-                calcSpeed(this.pos);
+                logotip.getPosTo().x += logotip.getDist();;
+                logotip.calcSpeed();
                 break;
             }
             default: {
                 break;
             }
         }
-
-        return false;//super.keyDown(keycode);
+        return false;
     }
-
+/*
     private void calcSpeed(Vector2 obj) {
-        /*Vector2 v = new Vector2(1, 1);
-        if (posTo.x < obj.x) {
-            v.x = -1;
-        }
-        if (posTo.y < obj.y) {
-            v.y = -1;
-        }*/
         //speed.set(posTo).nor().scl(v);
         speed.set(posTo).sub(obj).nor();
         //System.out.println(speed);
@@ -124,8 +115,5 @@ public class MenuScreen extends BaseScreen {
         ) {
             obj.add(speed);
         }
-        //    if (/*!pos.equals(posTo) ||*/ (pos.x < posTo.x && pos.y < posTo.y)) {
-        //   pos.add(speed);
-        //}
-    }
+    }*/
 }
