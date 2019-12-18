@@ -1,5 +1,6 @@
 package ru.homework.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -36,9 +37,21 @@ public class Logotip {
 
     }
 
+    public void changePosToKeyDown(int x, int y) {
+        this.posTo.y += this.dist*y;
+        this.posTo.x += this.dist*x;
+        //Рассчитаем новую скорость объекта
+        calcSpeed();
+    }
 
-    public void calcSpeed() {
-        speed.set(posTo).sub(pos).nor();
+    public void changePosToTouchDown(int x, int y) {
+        this.posTo.set(x, y);
+        //Рассчитаем новую скорость объекта
+        calcSpeed();
+    }
+
+    private void calcSpeed() {
+        this.speed.set(posTo).sub(pos).nor();
     }
 
     public void actionObject() {
@@ -47,16 +60,16 @@ public class Logotip {
                 || (speed.y < 0 && pos.y > posTo.y)
                 || (speed.y > 0 && pos.y < posTo.y)
         ) {
-            pos.add(speed);
+            this.pos.add(speed);
         }
     }
 
     public void stopActionObject() {
-        posTo.set(pos);
+        this.posTo.set(pos);
     }
 
     public void dispose() {
-        img.dispose();
+        this.img.dispose();
     }
 
     public float getDist() {
@@ -85,23 +98,23 @@ public class Logotip {
         return this;
     }
 
-    public Logotip setPos(Vector2 pos) {
-        this.pos = pos;
+    public Logotip setPos(Vector2 v) {
+        this.pos = v;
         return this;
     }
 
-    public Logotip setPosTo(Vector2 posTo) {
-        this.posTo = posTo;
+    public Logotip setPosTo(Vector2 v) {
+        this.posTo = v;
         return this;
     }
 
-    public Logotip setSpeed(Vector2 speed) {
-        this.speed = speed;
+    public Logotip setSpeed(Vector2 v) {
+        this.speed = v;
         return this;
     }
 
-    public Logotip setDist(float dist) {
-        this.dist = dist;
+    public Logotip setDist(float d) {
+        this.dist = d;
         return this;
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.BaseScreen;
 import ru.homework.gameobjects.Logotip;
 
@@ -12,7 +13,7 @@ public class MenuScreen extends BaseScreen {
     //private Texture img;
     private Logotip logotip;
     private Texture backGround;
-    //private Vector2 pos;
+    //private Vector2 temp;
     //private Vector2 posTo;
     //private Vector2 speed;
 
@@ -22,7 +23,7 @@ public class MenuScreen extends BaseScreen {
         logotip = new Logotip("badlogic.jpg");
         //img = new Texture("badlogic.jpg");
         backGround = new Texture("textures/starBackGround.jpg");
-        //pos = new Vector2();
+        //temp = new Vector2();
         //posTo = new Vector2();
         //speed = new Vector2();
     }
@@ -58,9 +59,10 @@ public class MenuScreen extends BaseScreen {
         System.out.println("touchDown screenX = " + screenX + " screenY " + screenY + " pointer " + pointer + " button " + button);
 
         //Задаем точку до которой требуется двигаться
-        logotip.getPosTo().set(screenX, Gdx.graphics.getHeight() - screenY);
+        logotip.changePosToTouchDown(screenX, Gdx.graphics.getHeight() - screenY);
+        //logotip.getPosTo().set(screenX, Gdx.graphics.getHeight() - screenY);
         //Рассчитываем вектор скорости для объекта
-        logotip.calcSpeed();
+        //ogotip.calcSpeed();
 
         //pos.set(screenX,Gdx.graphics.getHeight() - screenY);
         return false;
@@ -75,23 +77,31 @@ public class MenuScreen extends BaseScreen {
 
         switch (keycode) {
             case Input.Keys.DOWN: {
-                logotip.getPosTo().y -= logotip.getDist();
-                logotip.calcSpeed();
+                //Установим новую точку движения
+                logotip.changePosToKeyDown(0,-1);
+                //logotip.getPosTo().y -= logotip.getDist();
+                //logotip.calcSpeed();
                 break;
             }
             case Input.Keys.UP: {
-                logotip.getPosTo().y += logotip.getDist();;
-                logotip.calcSpeed();
+                //Установим новую точку движения
+                logotip.changePosToKeyDown(0,1);
+                //logotip.getPosTo().y += logotip.getDist();;
+                //logotip.calcSpeed();
                 break;
             }
             case Input.Keys.LEFT: {
-                logotip.getPosTo().x -= logotip.getDist();;
-                logotip.calcSpeed();
+                //Установим новую точку движения
+                logotip.changePosToKeyDown(-1,0);
+                //logotip.getPosTo().x -= logotip.getDist();;
+                //logotip.calcSpeed();
                 break;
             }
             case Input.Keys.RIGHT: {
-                logotip.getPosTo().x += logotip.getDist();;
-                logotip.calcSpeed();
+                //Установим новую точку движения
+                logotip.changePosToKeyDown(1,0);
+                //logotip.getPosTo().x += logotip.getDist();;
+                //logotip.calcSpeed();
                 break;
             }
             default: {
