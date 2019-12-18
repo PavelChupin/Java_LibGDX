@@ -18,7 +18,7 @@ public class Logotip {
     //Скорость перемещения
     private Vector2 speed;
 
-    public Logotip(){
+    private Logotip(){
         this.pos = new Vector2();
         this.posTo = new Vector2();
         this.speed = new Vector2();
@@ -38,8 +38,13 @@ public class Logotip {
     }
 
     public void changePosToKeyDown(int x, int y) {
-        this.posTo.y += this.dist*y;
-        this.posTo.x += this.dist*x;
+        this.posTo.add(this.dist*x,this.dist*y);
+        //Рассчитаем новую скорость объекта
+        calcSpeed();
+    }
+
+    public void changePosToKeyDown(Vector2 vectorTo) {
+        this.posTo.add(vectorTo.cpy().scl(dist));
         //Рассчитаем новую скорость объекта
         calcSpeed();
     }
@@ -72,6 +77,14 @@ public class Logotip {
         this.img.dispose();
     }
 
+    public float getPosX() {
+        return pos.x;
+    }
+
+    public float getPosY() {
+        return pos.y;
+    }
+
     public float getDist() {
         return dist;
     }
@@ -81,6 +94,8 @@ public class Logotip {
         return img;
     }
 
+    /* Убираем что бы защитить из вне координаты векторов.
+    Изменения допускаем только из методов объекта.
     public Vector2 getPos() {
         return pos;
     }
@@ -91,10 +106,10 @@ public class Logotip {
 
     public Vector2 getPosTo() {
         return posTo;
-    }
+    }*/
 
-    public Logotip setImg(Texture img) {
-        this.img = img;
+    public Logotip setImg(Texture t) {
+        this.img = t;
         return this;
     }
 
@@ -117,4 +132,5 @@ public class Logotip {
         this.dist = d;
         return this;
     }
+
 }

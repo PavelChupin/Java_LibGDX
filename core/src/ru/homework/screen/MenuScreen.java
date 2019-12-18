@@ -10,22 +10,16 @@ import ru.homework.gameobjects.Logotip;
 
 public class MenuScreen extends BaseScreen {
     private static final float DIST = 10f;
-    //private Texture img;
     private Logotip logotip;
     private Texture backGround;
-    //private Vector2 temp;
-    //private Vector2 posTo;
-    //private Vector2 speed;
+    private Vector2 vectorTo;
 
     @Override
     public void show() {
         super.show();
         logotip = new Logotip("badlogic.jpg");
-        //img = new Texture("badlogic.jpg");
         backGround = new Texture("textures/starBackGround.jpg");
-        //temp = new Vector2();
-        //posTo = new Vector2();
-        //speed = new Vector2();
+        vectorTo = new Vector2();
     }
 
     @Override
@@ -39,10 +33,11 @@ public class MenuScreen extends BaseScreen {
         batch.draw(backGround, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //batch.setColor(0.3f,0.5f,0.6f,1f);
-        batch.draw(logotip.getImg(), logotip.getPos().x, logotip.getPos().y);
+        batch.draw(logotip.getImg(), logotip.getPosX(), logotip.getPosY());
         //batch.draw(region,300,300);
         batch.end();
 
+        //Выполняем действие с объектом
         logotip.actionObject();
     }
 
@@ -60,54 +55,47 @@ public class MenuScreen extends BaseScreen {
 
         //Задаем точку до которой требуется двигаться
         logotip.changePosToTouchDown(screenX, Gdx.graphics.getHeight() - screenY);
-        //logotip.getPosTo().set(screenX, Gdx.graphics.getHeight() - screenY);
-        //Рассчитываем вектор скорости для объекта
-        //ogotip.calcSpeed();
 
-        //pos.set(screenX,Gdx.graphics.getHeight() - screenY);
         return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         System.out.println("keyDown keycode = " + keycode);
+        vectorTo.set(0,0);
 
         //Перехватим движение объекта в текущей точке
         logotip.stopActionObject();
 
         switch (keycode) {
             case Input.Keys.DOWN: {
-                //Установим новую точку движения
-                logotip.changePosToKeyDown(0,-1);
-                //logotip.getPosTo().y -= logotip.getDist();
-                //logotip.calcSpeed();
+                //Установим направление движения
+                vectorTo.set(0,-1);
                 break;
             }
             case Input.Keys.UP: {
-                //Установим новую точку движения
-                logotip.changePosToKeyDown(0,1);
-                //logotip.getPosTo().y += logotip.getDist();;
-                //logotip.calcSpeed();
+                //Установим направление движения
+                vectorTo.set(0,1);
                 break;
             }
             case Input.Keys.LEFT: {
-                //Установим новую точку движения
-                logotip.changePosToKeyDown(-1,0);
-                //logotip.getPosTo().x -= logotip.getDist();;
-                //logotip.calcSpeed();
+                //Установим направление движения
+                vectorTo.set(-1,0);
                 break;
             }
             case Input.Keys.RIGHT: {
-                //Установим новую точку движения
-                logotip.changePosToKeyDown(1,0);
-                //logotip.getPosTo().x += logotip.getDist();;
-                //logotip.calcSpeed();
+                //Установим направление движения
+                vectorTo.set(1,0);
                 break;
             }
             default: {
                 break;
             }
         }
+
+        //Меняем направление движения объекта
+        logotip.changePosToKeyDown(vectorTo);
+
         return false;
     }
 /*
