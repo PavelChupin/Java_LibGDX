@@ -1,10 +1,11 @@
 package ru.homework.gameobjects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-public class Logotip {
+public class Logotip implements GameObjects {
     private static final float DIST = 10f;
 
     //Смещение при передвижении на клавиатуре
@@ -59,6 +60,7 @@ public class Logotip {
         this.speed.set(posTo).sub(pos).nor();
     }
 
+    @Override
     public void actionObject() {
         if ((speed.x < 0 && pos.x > posTo.x)
                 || (speed.x > 0 && pos.x < posTo.x)

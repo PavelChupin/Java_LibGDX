@@ -6,13 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.BaseScreen;
+import ru.homework.gameobjects.GameObjects;
 import ru.homework.gameobjects.Logotip;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuScreen extends BaseScreen {
     private static final float DIST = 10f;
     private Logotip logotip;
     private Texture backGround;
     private Vector2 vectorTo;
+    private List<GameObjects> gameObjects = new ArrayList();
 
     @Override
     public void show() {
@@ -20,6 +25,7 @@ public class MenuScreen extends BaseScreen {
         logotip = new Logotip("badlogic.jpg");
         backGround = new Texture("textures/starBackGround.jpg");
         vectorTo = new Vector2();
+        gameObjects.add(logotip);
     }
 
     @Override
@@ -38,7 +44,9 @@ public class MenuScreen extends BaseScreen {
         batch.end();
 
         //Выполняем действие с объектом
-        logotip.actionObject();
+        for (GameObjects o : gameObjects) {
+            o.actionObject();
+        }
     }
 
     @Override
