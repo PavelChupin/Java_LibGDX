@@ -24,8 +24,8 @@ public class Logotip extends Sprite {
 
     public Logotip(TextureRegion region) {
         super(region);
-        this.positionObj = new Vector2();
-        this.posTo = new Vector2();
+        this.positionObj = new Vector2(-0.33f,-0.5f);
+        this.posTo = new Vector2(-0.33f,-0.5f);
         this.speedV = new Vector2();
     }
 
