@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.homework.base.BaseScreen;
-import ru.homework.base.SpriteImpl;
+import ru.homework.base.Sprite;
 import ru.homework.sprite.Logotip;
 import ru.homework.math.Rect;
 import ru.homework.sprite.Background;
@@ -22,9 +22,7 @@ public class MenuScreen extends BaseScreen {
     private Logotip logotip;
     private Texture logo;
 
-    private Vector2 vectorTo;
-
-    private List<SpriteImpl> sprites = new ArrayList();
+    private List<Sprite> sprites = new ArrayList();
 
     @Override
     public void show() {
@@ -40,7 +38,6 @@ public class MenuScreen extends BaseScreen {
         //Установим матрицу проекций в единичную
         //batch.getProjectionMatrix().idt();
 
-        vectorTo = new Vector2();
     }
 
     @Override
@@ -51,13 +48,13 @@ public class MenuScreen extends BaseScreen {
         batch.begin();
 
         //Отрисовываем все объекты
-        for (SpriteImpl s: sprites) {
+        for (Sprite s: sprites) {
             s.draw(batch);
         }
         batch.end();
 
         //Выполняем действие с объектом
-        for (SpriteImpl s: sprites) {
+        for (Sprite s: sprites) {
             s.actionObject();
         }
     }
@@ -74,46 +71,20 @@ public class MenuScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         super.touchDown(touch, pointer, button);
 
-        logotip.changePosToTouchDown(touch.x,touch.y);
+        for (Sprite s: sprites) {
+            s.touchDown(touch, pointer, button);
+        }
+
         return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         System.out.println("keyDown keycode = " + keycode);
-        vectorTo.set(0, 0);
 
-        //Перехватим движение объекта в текущей точке
-        logotip.stopActionObject();
-
-        switch (keycode) {
-            case Input.Keys.DOWN: {
-                //Установим направление движения
-                vectorTo.set(0, -1);
-                break;
-            }
-            case Input.Keys.UP: {
-                //Установим направление движения
-                vectorTo.set(0, 1);
-                break;
-            }
-            case Input.Keys.LEFT: {
-                //Установим направление движения
-                vectorTo.set(-1, 0);
-                break;
-            }
-            case Input.Keys.RIGHT: {
-                //Установим направление движения
-                vectorTo.set(1, 0);
-                break;
-            }
-            default: {
-                break;
-            }
+        for (Sprite s: sprites) {
+            s.keyDown(keycode);
         }
-
-        //Меняем направление движения объекта
-        logotip.changePosToKeyDown(vectorTo);
 
         return false;
     }
