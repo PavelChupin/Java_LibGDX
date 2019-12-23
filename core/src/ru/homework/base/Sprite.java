@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.math.Rect;
 
 
-public class Sprite extends Rect {
+public abstract class Sprite extends Rect implements SpriteImpl {
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
@@ -29,11 +29,15 @@ public class Sprite extends Rect {
         setWidth(height * aspect);
     }
 
-
+    @Override
     public void draw(SpriteBatch batch) {
         batch.draw(regions[frame], getLeft(), getBottom(), halfWidth, halfHeight, getWidth(), getHeight(), scale, scale, angle);
     }
 
+    @Override
+    public void actionObject() {
+
+    }
 
     public void resize(Rect worldBounds) {
 
