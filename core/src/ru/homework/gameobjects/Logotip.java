@@ -1,7 +1,5 @@
 package ru.homework.gameobjects;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,7 +17,7 @@ public class Logotip implements GameObjects {
     //Скорость перемещения
     private Vector2 speed;
 
-    private Logotip(){
+    private Logotip() {
         this.pos = new Vector2();
         this.posTo = new Vector2();
         this.speed = new Vector2();
@@ -38,8 +36,8 @@ public class Logotip implements GameObjects {
 
     }
 
-    public void changePosToKeyDown(int x, int y) {
-        this.posTo.add(this.dist*x,this.dist*y);
+    public void changePosToKeyDown(float x, float y) {
+        this.posTo.add(this.dist * x, this.dist * y);
         //Рассчитаем новую скорость объекта
         calcSpeed();
     }
@@ -50,7 +48,7 @@ public class Logotip implements GameObjects {
         calcSpeed();
     }
 
-    public void changePosToTouchDown(int x, int y) {
+    public void changePosToTouchDown(float x, float y) {
         this.posTo.set(x, y);
         //Рассчитаем новую скорость объекта
         calcSpeed();

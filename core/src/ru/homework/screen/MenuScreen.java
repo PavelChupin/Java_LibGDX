@@ -4,18 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import ru.homework.base.BaseScreen;
-import ru.homework.gameobjects.GameObjects;
-import ru.homework.gameobjects.Logotip;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.homework.base.BaseScreen;
+import ru.homework.gameobjects.GameObjects;
+import ru.homework.gameobjects.Logotip;
+import ru.homework.math.Rect;
+import ru.homework.sprite.Background;
+
 public class MenuScreen extends BaseScreen {
     private static final float DIST = 10f;
+    private Texture bg;
+    private Background background;
     private Logotip logotip;
-    private Texture backGround;
     private Vector2 vectorTo;
     private List<GameObjects> gameObjects = new ArrayList();
 
@@ -23,9 +28,12 @@ public class MenuScreen extends BaseScreen {
     public void show() {
         super.show();
         logotip = new Logotip("badlogic.jpg");
-        backGround = new Texture("textures/starBackGround.jpg");
         vectorTo = new Vector2();
         gameObjects.add(logotip);
+        bg = new Texture("textures/starBackGround.jpg");
+        background = new Background(new TextureRegion(bg));
+        //Установим матрицу проекций в единичную
+        //batch.getProjectionMatrix().idt();
     }
 
     @Override
@@ -35,28 +43,40 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //Отрисовываем фон
+        background.draw(batch);
         //batch.setColor(1,1,1,1f);
-        batch.draw(backGround, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //batch.draw(bg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //batch.setColor(0.3f,0.5f,0.6f,1f);
-        batch.draw(logotip.getImg(), logotip.getPosX(), logotip.getPosY());
+        //batch.draw(logotip.getImg(), logotip.getPosX(), logotip.getPosY());
+        batch.draw(logotip.getImg(), 0, 0, 0.5f, 0.5f);
         //batch.draw(region,300,300);
         batch.end();
 
         //Выполняем действие с объектом
-        for (GameObjects o : gameObjects) {
+        /*for (GameObjects o : gameObjects) {
             o.actionObject();
-        }
+        }*/
     }
 
     @Override
     public void dispose() {
         logotip.dispose();
-        backGround.dispose();
+        bg.dispose();
 
         super.dispose();
     }
 
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        super.touchDragged(touch, pointer);
+
+        //logotip.changePosToTouchDown(touch.x,touch.y);
+
+        return false;
+    }
+
+    /*
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         System.out.println("touchDown screenX = " + screenX + " screenY " + screenY + " pointer " + pointer + " button " + button);
@@ -65,12 +85,13 @@ public class MenuScreen extends BaseScreen {
         logotip.changePosToTouchDown(screenX, Gdx.graphics.getHeight() - screenY);
 
         return false;
-    }
+    }*/
+
 
     @Override
     public boolean keyDown(int keycode) {
         System.out.println("keyDown keycode = " + keycode);
-        vectorTo.set(0,0);
+        vectorTo.set(0, 0);
 
         //Перехватим движение объекта в текущей точке
         logotip.stopActionObject();
@@ -78,22 +99,22 @@ public class MenuScreen extends BaseScreen {
         switch (keycode) {
             case Input.Keys.DOWN: {
                 //Установим направление движения
-                vectorTo.set(0,-1);
+                vectorTo.set(0, -1);
                 break;
             }
             case Input.Keys.UP: {
                 //Установим направление движения
-                vectorTo.set(0,1);
+                vectorTo.set(0, 1);
                 break;
             }
             case Input.Keys.LEFT: {
                 //Установим направление движения
-                vectorTo.set(-1,0);
+                vectorTo.set(-1, 0);
                 break;
             }
             case Input.Keys.RIGHT: {
                 //Установим направление движения
-                vectorTo.set(1,0);
+                vectorTo.set(1, 0);
                 break;
             }
             default: {
@@ -106,20 +127,10 @@ public class MenuScreen extends BaseScreen {
 
         return false;
     }
-/*
-    private void calcSpeed(Vector2 obj) {
-        //speed.set(posTo).nor().scl(v);
-        speed.set(posTo).sub(obj).nor();
-        //System.out.println(speed);
-    }
 
-    private void actionObject(Vector2 obj) {
-        if ((speed.x < 0 && obj.x > posTo.x)
-                || (speed.x > 0 && obj.x < posTo.x)
-                || (speed.y < 0 && obj.y > posTo.y)
-                || (speed.y > 0 && obj.y < posTo.y)
-        ) {
-            obj.add(speed);
-        }
-    }*/
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        background.resize(worldBounds);
+    }
 }

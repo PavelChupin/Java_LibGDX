@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		config.width = 400;
 		config.height = 600;
 		//Отключаем возможность растягивать экран
-		config.resizable = false;
+		config.resizable = true;
 		new LwjglApplication(new StarGame(), config);
 	}
 }

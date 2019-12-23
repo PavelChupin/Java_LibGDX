@@ -1,29 +1,23 @@
 package ru.homework;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
+
 import ru.homework.screen.MenuScreen;
 
 public class StarGame extends Game {
     /*SpriteBatch batch;
     Texture img;
-    Texture backGround;
+    Texture bg;
     //TextureRegion region;
     */
 
 
     @Override
     public void create() {
-         setScreen(new MenuScreen());
+        setScreen(new MenuScreen());
        /* batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
-        backGround = new Texture("starBackGround.jpg");
+        bg = new Texture("starBackGround.jpg");
         //region = new TextureRegion(img,20,20,100,80);
 
         //Операции с векторами
@@ -38,7 +32,7 @@ public class StarGame extends Game {
         batch.begin();
         //Отрисовываем фон
         //batch.setColor(1,1,1,1f);
-        batch.draw(backGround, 0, 0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        batch.draw(bg, 0, 0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
         //batch.setColor(0.3f,0.5f,0.6f,1f);
         //batch.draw(img, 10, 10);
@@ -50,7 +44,7 @@ public class StarGame extends Game {
     public void dispose() {
         batch.dispose();
         img.dispose();
-        backGround.dispose();
+        bg.dispose();
     }*/
 /*
     private void opersWithVector() {
