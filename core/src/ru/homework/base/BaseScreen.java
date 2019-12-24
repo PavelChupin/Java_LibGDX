@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.math.MatrixUtils;
 import ru.homework.math.Rect;
 
-public class BaseScreen implements Screen, InputProcessor {
+public abstract class BaseScreen implements Screen, InputProcessor {
     protected SpriteBatch batch;
 
     private Rect screenBounds;

@@ -1,5 +1,6 @@
 package ru.homework.sprite;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.homework.base.Sprite;
@@ -14,7 +15,12 @@ public class Background extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportian(worldBounds.getHeight());
+        setHeightProportion(worldBounds.getHeight());
         pos.set(worldBounds.pos);
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        batch.draw(regions[frame], getLeft(), getBottom(), halfWidth, halfHeight, getWidth(), getHeight(), scale, scale, angle);
     }
 }

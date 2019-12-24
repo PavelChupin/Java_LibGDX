@@ -77,13 +77,13 @@ com_crashlytics_export_strings.xml
 /ios/nbbuild/
 /ios-moe/nbbuild/
 
-/dist/
-/android/dist/
-/core/dist/
-/desktop/dist/
-/html/dist/
-/ios/dist/
-/ios-moe/dist/
+/speed/
+/android/speed/
+/core/speed/
+/desktop/speed/
+/html/speed/
+/ios/speed/
+/ios-moe/speed/
 
 /nbdist/
 /android/nbdist/
