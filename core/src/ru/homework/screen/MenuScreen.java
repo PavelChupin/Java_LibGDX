@@ -1,7 +1,6 @@
 package ru.homework.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,15 +11,16 @@ import java.util.List;
 
 import ru.homework.base.BaseScreen;
 import ru.homework.base.Sprite;
-import ru.homework.sprite.Logotip;
 import ru.homework.math.Rect;
 import ru.homework.sprite.Background;
+import ru.homework.sprite.Logotip;
 
 public class MenuScreen extends BaseScreen {
     private Texture bg;
+    private Texture logo;
+
     private Background background;
     private Logotip logotip;
-    private Texture logo;
 
     private List<Sprite> sprites = new ArrayList();
 
@@ -43,20 +43,29 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        //Выполняем действие с объектом
+        update(delta);
+
+        //Отрисовывааем объекты
+        draw();
+    }
+
+    private void update(float delta) {
+        for (Sprite s : sprites) {
+            s.update(delta);
+        }
+    }
+
+    private void draw() {
         Gdx.gl.glClearColor(0.2f, 0.6f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
 
         //Отрисовываем все объекты
-        for (Sprite s: sprites) {
+        for (Sprite s : sprites) {
             s.draw(batch);
         }
         batch.end();
-
-        //Выполняем действие с объектом
-        for (Sprite s: sprites) {
-            s.actionObject();
-        }
     }
 
     @Override
@@ -71,7 +80,7 @@ public class MenuScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         super.touchDown(touch, pointer, button);
 
-        for (Sprite s: sprites) {
+        for (Sprite s : sprites) {
             s.touchDown(touch, pointer, button);
         }
 
@@ -82,7 +91,7 @@ public class MenuScreen extends BaseScreen {
     public boolean keyDown(int keycode) {
         System.out.println("keyDown keycode = " + keycode);
 
-        for (Sprite s: sprites) {
+        for (Sprite s : sprites) {
             s.keyDown(keycode);
         }
 

@@ -32,8 +32,9 @@ public abstract class Sprite extends Rect  {
         setWidth(height * aspect);
     }
 
+    /*
     public void actionObject(){};
-
+*/
     public abstract void draw(SpriteBatch batch);
 
     public abstract void resize(Rect worldBounds);
