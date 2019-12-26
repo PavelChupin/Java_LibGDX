@@ -17,6 +17,7 @@ import ru.homework.math.Rect;
 import ru.homework.sprite.Background;
 import ru.homework.sprite.ButtonExit;
 import ru.homework.sprite.ButtonPlay;
+import ru.homework.sprite.Logotip;
 import ru.homework.sprite.Star;
 
 public class MenuScreen extends BaseScreen {

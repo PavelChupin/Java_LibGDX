@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.math.Rect;
 
 
-public abstract class Sprite extends Rect  {
+public abstract class Sprite extends Rect {
     //Вектор направления для рассчетов
     protected Vector2 vectorTo = new Vector2();
 
@@ -17,6 +17,12 @@ public abstract class Sprite extends Rect  {
     protected TextureRegion[] regions;
     protected int frame;
 
+    public Sprite(int frames) {
+        if (frames == 0) {
+            throw new RuntimeException("Count texture set 0");
+        }
+        regions = new TextureRegion[frames];
+    }
 
     public Sprite(TextureRegion region) {
         if (region == null) {
@@ -25,6 +31,7 @@ public abstract class Sprite extends Rect  {
         regions = new TextureRegion[1];
         regions[0] = region;
     }
+
 
     public void setHeightProportion(float height) {
         setHeight(height);
@@ -50,6 +57,9 @@ public abstract class Sprite extends Rect  {
 
     }
 
+    public void action(){}
+
+
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         return false;
     }
@@ -58,7 +68,7 @@ public abstract class Sprite extends Rect  {
         return false;
     }
 
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 
@@ -86,6 +96,11 @@ public abstract class Sprite extends Rect  {
                 vectorTo.set(1, 0);
                 break;
             }
+            case Input.Keys.SPACE: {
+                //Установим направление движения
+                action();
+                break;
+            }
             default: {
                 break;
             }
@@ -109,4 +124,5 @@ public abstract class Sprite extends Rect  {
     public void setScale(float scale) {
         this.scale = scale;
     }
+
 }

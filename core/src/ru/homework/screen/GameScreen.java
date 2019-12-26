@@ -12,8 +12,11 @@ import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.sprite.Background;
 import ru.homework.sprite.Star;
+import ru.homework.sprite.StarShip;
 
 public class GameScreen extends BaseScreen {
+    private StarShip starShip;
+
 
     @Override
     public void show() {
@@ -22,11 +25,14 @@ public class GameScreen extends BaseScreen {
         background = new Background(new TextureRegion(bg));
         sprites.add(background);
 
-        atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
+        atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
         stars = new Star[64];
         for (int i = 0; i < stars.length; i++) {
             this.sprites.add(new Star(atlas));
         }
+
+        starShip = new StarShip(atlas,this);
+        sprites.add(starShip);
     }
 
     @Override
@@ -71,11 +77,41 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        return super.touchDown(touch, pointer, button);
+        //super.touchDown(touch, pointer, button);
+
+        for (Sprite s : sprites) {
+            s.touchDown(touch, pointer, button);
+        }
+
+        return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        for (Sprite s : sprites) {
+            s.touchUp(touch, pointer, button);
+        }
+        return false;
     }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        System.out.println("keyDown keycode = " + keycode);
+
+        for (Sprite s : sprites) {
+            s.keyDown(keycode);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        for (Sprite s : sprites) {
+            s.touchDragged(touch,pointer);
+        }
+        return false;
+    }
+
+
 }
