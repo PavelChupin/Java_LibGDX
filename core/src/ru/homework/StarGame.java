@@ -14,7 +14,7 @@ public class StarGame extends Game {
 
     @Override
     public void create() {
-        setScreen(new MenuScreen());
+        setScreen(new MenuScreen(this));
        /* batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
         bg = new Texture("starBackGround.jpg");
