@@ -39,11 +39,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     protected List<Sprite> sprites = new ArrayList();
     protected Star[] stars;
 
-    /*protected BaseScreen() {
-        bg = new Texture("textures/starBackGround.jpg");
-        background = new Background(new TextureRegion(bg));
-    }*/
-
     @Override
     public void show() {
         System.out.println("show");
@@ -63,11 +58,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.6f, 0.5f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-            background.draw(batch);
-        batch.end();
     }
 
     @Override
@@ -96,7 +86,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     public void resize(Rect worldBounds) {
         System.out.println("resize width = " + worldBounds.getWidth() + " height " + worldBounds.getHeight());
-        //background.resize(worldBounds);
     }
 
     @Override
