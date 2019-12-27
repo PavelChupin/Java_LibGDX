@@ -1,6 +1,5 @@
 package ru.homework.sprite;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,7 +14,7 @@ public class Logotip extends Sprite {
     private float speed = SPEED;
 
     //Текущая позиция
-    private Vector2 positionObj;
+    //private Vector2 positionObj;
     //Позиция перемещения
     private Vector2 posTo;
     //Скорость перемещения
@@ -23,8 +22,8 @@ public class Logotip extends Sprite {
 
     public Logotip(TextureRegion region) {
         super(region);
-        this.positionObj = new Vector2();
-        this.posTo = new Vector2(positionObj);
+        //this.positionObj = new Vector2();
+        this.posTo = new Vector2(pos);
         this.speedV = new Vector2();
     }
 
@@ -59,23 +58,18 @@ public class Logotip extends Sprite {
 
     private void calcSpeed() {
         //Переделываем реализацию через setLenght, т.к. через nor() с мелкой сеткой float значений есть косяк.
-        this.speedV.set(posTo).sub(positionObj).setLength(speed);
+        this.speedV.set(posTo).sub(pos).setLength(speed);
     }
 
     private void stopActionObject() {
-        this.posTo.set(positionObj);
+        this.posTo.set(pos);
     }
 
-
-    @Override
-    public void draw(SpriteBatch batch) {
-        batch.draw(regions[frame], positionObj.x, positionObj.y, halfWidth, halfHeight);
-    }
 
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(OBJECT_SIZE_PROPORC);
-        positionObj.set(worldBounds.getLeft() + halfWidth,worldBounds.getBottom() + halfHeight);
+        pos.set(worldBounds.getLeft() + halfWidth, worldBounds.getBottom() + halfHeight);
     }
 
     @Override
@@ -105,17 +99,13 @@ public class Logotip extends Sprite {
     public void update(float delta) {
         super.update(delta);
 
-        if ((speedV.x < 0 && positionObj.x > posTo.x)
-                || (speedV.x > 0 && positionObj.x < posTo.x)
-                || (speedV.y < 0 && positionObj.y > posTo.y)
-                || (speedV.y > 0 && positionObj.y < posTo.y)
+        if ((speedV.x < 0 && pos.x > posTo.x)
+                || (speedV.x > 0 && pos.x < posTo.x)
+                || (speedV.y < 0 && pos.y > posTo.y)
+                || (speedV.y > 0 && pos.y < posTo.y)
         ) {
-            this.positionObj.add(speedV);
-        }
-        /*buf.set(posTo);
-        if (buf.sub(positionObj).len() > SPEED) {
-            this.positionObj.add(speedV);
-        }*/ else {
+            this.pos.add(speedV);
+        } else {
             stopActionObject();
         }
 

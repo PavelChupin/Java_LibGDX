@@ -57,7 +57,8 @@ public abstract class Sprite extends Rect {
 
     }
 
-    public void action(){}
+    public void action() {
+    }
 
 
     public boolean touchDown(Vector2 touch, int pointer, int button) {
@@ -98,6 +99,7 @@ public abstract class Sprite extends Rect {
             }
             case Input.Keys.SPACE: {
                 //Установим направление движения
+                vectorTo.set(0, 1);
                 action();
                 break;
             }

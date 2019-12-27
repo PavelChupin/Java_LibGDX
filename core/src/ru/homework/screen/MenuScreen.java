@@ -2,32 +2,21 @@ package ru.homework.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import ru.homework.base.BaseScreen;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
-import ru.homework.sprite.Background;
 import ru.homework.sprite.ButtonExit;
 import ru.homework.sprite.ButtonPlay;
-import ru.homework.sprite.Logotip;
 import ru.homework.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
     private Game game;
 
-    //private Texture bg;
-    //private Background background;
     //private Texture logo;
     //private Logotip logotip;
-    //private List<Sprite> sprites = new ArrayList();
 
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
@@ -40,13 +29,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        bg = new Texture("textures/starBackGround.jpg");
-        background = new Background(new TextureRegion(bg));
-        sprites.add(background);
-
         //logo = new Texture("badlogic.jpg");
         //logotip = new Logotip(new TextureRegion(logo));
         //sprites.add(logotip);
+
         atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
         stars = new Star[256];
         for (int i = 0; i < stars.length; i++) {
@@ -60,8 +46,6 @@ public class MenuScreen extends BaseScreen {
         sprites.add(buttonPlay);
         //Установим матрицу проекций в единичную
         //batch.getProjectionMatrix().idt();
-
-
     }
 
     @Override
@@ -81,8 +65,6 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void draw() {
-        Gdx.gl.glClearColor(0.2f, 0.6f, 0.5f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         //Отрисовываем все объекты
         for (Sprite s : sprites) {
@@ -93,9 +75,6 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void dispose() {
-        //logo.dispose();
-        //bg.dispose();
-        //atlas.dispose();
         super.dispose();
     }
 

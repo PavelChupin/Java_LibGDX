@@ -1,6 +1,5 @@
 package ru.homework.sprite;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,7 @@ import ru.homework.screen.GameScreen;
 
 public class StarShip extends Sprite {
     private static final float SPEED = 0.01f;
-    private static final float OBJECT_SIZE_PROPORC = 0.25f;
+    private static final float OBJECT_SIZE_PROPORC = 0.15f;
     private GameScreen gameScreen;
 
     private float speed = SPEED;
@@ -31,19 +30,15 @@ public class StarShip extends Sprite {
     }
 
     public StarShip(TextureAtlas atlas, float speed, GameScreen gameScreen) {
-        this(atlas,gameScreen);
+        this(atlas, gameScreen);
         this.speed = speed;
     }
 
-    @Override
-    public void draw(SpriteBatch batch) {
-        batch.draw(regions[frame], pos.x, pos.y, halfWidth, halfHeight);
-    }
 
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(OBJECT_SIZE_PROPORC);
-        pos.set(worldBounds.getLeft() + halfWidth, worldBounds.getBottom() + halfHeight);
+        pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
     }
 
     @Override

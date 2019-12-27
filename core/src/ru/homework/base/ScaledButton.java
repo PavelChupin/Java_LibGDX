@@ -1,6 +1,5 @@
 package ru.homework.base;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,7 +17,7 @@ public abstract class ScaledButton extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if (isPressed || !isMe(touch)){
+        if (isPressed || !isMe(touch)) {
             return false;
         }
         this.pointer = pointer;
@@ -29,7 +28,7 @@ public abstract class ScaledButton extends Sprite {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        if (this.pointer != pointer || ! this.isPressed) {
+        if (this.pointer != pointer || !this.isPressed) {
             return false;
         }
         if (isMe(touch)) {
@@ -41,7 +40,7 @@ public abstract class ScaledButton extends Sprite {
     }
 
     @Override
-    public  abstract void resize(Rect worldBounds);
+    public abstract void resize(Rect worldBounds);
 
     public abstract void action();
 }
