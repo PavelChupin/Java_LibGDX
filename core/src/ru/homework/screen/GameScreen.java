@@ -95,6 +95,15 @@ public class GameScreen extends BaseScreen {
     }
 
     @Override
+    public boolean keyUp(int keycode) {
+        System.out.println("keyUp keycode = " + keycode);
+        for (Sprite s : sprites) {
+            s.keyUp(keycode);
+        }
+        return false;
+    }
+
+    @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
         for (Sprite s : sprites) {
             s.touchDragged(touch, pointer);

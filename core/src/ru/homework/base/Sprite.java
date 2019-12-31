@@ -6,23 +6,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.homework.math.Rect;
+import ru.homework.utils.Regions;
 
 
 public abstract class Sprite extends Rect {
-    //Вектор направления для рассчетов
-    protected Vector2 vectorTo = new Vector2();
+
 
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
     protected int frame;
 
-    public Sprite(int frames) {
+    /*public Sprite(int frames) {
         if (frames == 0) {
             throw new RuntimeException("Count texture set 0");
         }
         regions = new TextureRegion[frames];
-    }
+    }*/
 
     public Sprite(TextureRegion region) {
         if (region == null) {
@@ -32,6 +32,12 @@ public abstract class Sprite extends Rect {
         regions[0] = region;
     }
 
+    public Sprite(TextureRegion region, int rows, int cols, int frames){
+        if (region == null) {
+            throw new NullPointerException("Region is null");
+        }
+        regions = Regions.split(region,rows,cols,frames);
+    }
 
     public void setHeightProportion(float height) {
         setHeight(height);
@@ -60,7 +66,6 @@ public abstract class Sprite extends Rect {
     public void action() {
     }
 
-
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         return false;
     }
@@ -74,40 +79,10 @@ public abstract class Sprite extends Rect {
     }
 
     public boolean keyDown(int keycode) {
-        vectorTo.set(0, 0);
+        return false;
+    }
 
-        switch (keycode) {
-            case Input.Keys.DOWN: {
-                //Установим направление движения
-                vectorTo.set(0, -1);
-                break;
-            }
-            case Input.Keys.UP: {
-                //Установим направление движения
-                vectorTo.set(0, 1);
-                break;
-            }
-            case Input.Keys.LEFT: {
-                //Установим направление движения
-                vectorTo.set(-1, 0);
-                break;
-            }
-            case Input.Keys.RIGHT: {
-                //Установим направление движения
-                vectorTo.set(1, 0);
-                break;
-            }
-            case Input.Keys.SPACE: {
-                //Установим направление движения
-                vectorTo.set(0, 1);
-                action();
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-
+    public boolean keyUp(int keycode) {
         return false;
     }
 

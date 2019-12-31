@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
-
+/*
 public class Logotip extends Sprite {
     private static final float SPEED = 0.01f;
     private static final float OBJECT_SIZE_PROPORC = 0.3f;
@@ -119,3 +119,4 @@ public class Logotip extends Sprite {
         this.speed = speed;
     }
 }
+*/
