@@ -3,6 +3,7 @@ package ru.homework.base;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,6 +23,7 @@ import ru.homework.sprite.Star;
 
 public abstract class BaseScreen implements Screen, InputProcessor {
     protected SpriteBatch batch;
+    private Music music;
 
     private Rect screenBounds;
     private Rect worldBounds;
@@ -54,6 +56,11 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         touch = new Vector2();
         //Подключаем класс с методами отслеживания нажатия кнопок на клавиатуре, мышке или точпаде
         Gdx.input.setInputProcessor(this);
+
+        //Подулючаем музыкальное сопровождение
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.play();
+        music.setLooping(true);
     }
 
     @Override
@@ -117,6 +124,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         batch.dispose();
         bg.dispose();
         atlas.dispose();
+        music.dispose();
     }
 
     @Override
