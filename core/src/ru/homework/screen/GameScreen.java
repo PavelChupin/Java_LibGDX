@@ -1,6 +1,7 @@
 package ru.homework.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,6 +17,8 @@ public class GameScreen extends BaseScreen {
 
     private BulletPool bulletPool;
 
+    private Sound bulletSound;
+
     @Override
     public void show() {
         super.show();
@@ -26,11 +29,11 @@ public class GameScreen extends BaseScreen {
             this.sprites.add(new Star(atlas));
         }
 
+
+        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         bulletPool = new BulletPool();
-        starShip = new StarShip(atlas, bulletPool);
+        starShip = new StarShip(atlas, bulletPool,bulletSound);
         sprites.add(starShip);
-
-
     }
 
     private void freeAllDestroyed(){
@@ -77,7 +80,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         bulletPool.dispose();
-
+        bulletSound.dispose();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.homework.sprite;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import ru.homework.screen.GameScreen;
 public class StarShip extends StarShipBase {
     private static final float SPEED = 0.01f;
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
+    private Sound bulletSound;
 
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
@@ -25,7 +27,7 @@ public class StarShip extends StarShipBase {
     //Позиция перемещения
     private Vector2 posTo;
 
-    public StarShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public StarShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         TextureRegion region = atlas.findRegion("main_ship");
         //regions[0] = new TextureRegion(region, 0, 0, region.getRegionWidth() / 2, region.getRegionHeight());
@@ -39,11 +41,12 @@ public class StarShip extends StarShipBase {
         this.posTo = new Vector2(pos);
         this.speedV = new Vector2();
         this.bulletPool = bulletPool;
+        this.bulletSound = bulletSound;
         //this.gameScreen = gameScreen;
     }
 
-    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool) {
-        this(atlas,bulletPool);
+    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {
+        this(atlas,bulletPool,bulletSound);
         this.speed = speed;
     }
 
@@ -201,6 +204,7 @@ public class StarShip extends StarShipBase {
 
     protected void shoot(){
         Bullet bullet = bulletPool.obtain();
+        bulletSound.play(0.01f);
         bullet.set(this,bulletRegion,pos,bulletV,bulletHeight,worldBounts,damage);
     }
 }
