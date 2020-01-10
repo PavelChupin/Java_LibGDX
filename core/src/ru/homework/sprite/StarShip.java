@@ -8,20 +8,23 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.StarShipBase;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
-import ru.homework.screen.GameScreen;
 
 public class StarShip extends StarShipBase {
     private static final float SPEED = 0.01f;
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
-    private Sound bulletSound;
 
+    //Поля для пула пуль
+    private Sound bulletSound;
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private float bulletHeight;
     private Vector2 bulletV;
     private int damage;
-    //private GameScreen gameScreen;
+    //Поля для автострельбы
+    private int autoTimerCount = 0;
+    private int autoTimerInteval = 30;
 
+    //Скорость и векор напрвления скорости
     private float speed = SPEED;
     private Vector2 speedV;
     //Позиция перемещения
@@ -35,18 +38,17 @@ public class StarShip extends StarShipBase {
 
         bulletRegion = atlas.findRegion("bulletMainShip");
         bulletHeight = 0.01f;
-        bulletV = new Vector2(0,0.5f);
+        bulletV = new Vector2(0, 0.5f);
         damage = 1;
 
         this.posTo = new Vector2(pos);
         this.speedV = new Vector2();
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
-        //this.gameScreen = gameScreen;
     }
 
     public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {
-        this(atlas,bulletPool,bulletSound);
+        this(atlas, bulletPool, bulletSound);
         this.speed = speed;
     }
 
@@ -88,6 +90,13 @@ public class StarShip extends StarShipBase {
             this.pos.add(speedV);
         } else {
             stopActionObject();
+        }
+
+        //Автострельба
+        autoTimerCount++;
+        if (autoTimerCount > autoTimerInteval) {
+            shoot();
+            autoTimerCount = 0;
         }
     }
 
@@ -193,7 +202,6 @@ public class StarShip extends StarShipBase {
     }
 
 
-
     public float getSpeed() {
         return speed;
     }
@@ -202,9 +210,9 @@ public class StarShip extends StarShipBase {
         this.speed = speed;
     }
 
-    protected void shoot(){
+    protected void shoot() {
         Bullet bullet = bulletPool.obtain();
         bulletSound.play(0.01f);
-        bullet.set(this,bulletRegion,pos,bulletV,bulletHeight,worldBounts,damage);
+        bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounts, damage);
     }
 }
