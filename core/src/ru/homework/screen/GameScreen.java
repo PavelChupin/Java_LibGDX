@@ -7,12 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.BaseScreen;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
+import ru.homework.pool.BulletPool;
 import ru.homework.sprite.Star;
 import ru.homework.sprite.StarShip;
 
 public class GameScreen extends BaseScreen {
     private StarShip starShip;
 
+    private BulletPool bulletPool;
 
     @Override
     public void show() {
@@ -24,14 +26,22 @@ public class GameScreen extends BaseScreen {
             this.sprites.add(new Star(atlas));
         }
 
-        starShip = new StarShip(atlas, this);
+        bulletPool = new BulletPool();
+        starShip = new StarShip(atlas, bulletPool);
         sprites.add(starShip);
+
+
+    }
+
+    private void freeAllDestroyed(){
+        bulletPool.freeAllDestroyedActiveObjects();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        freeAllDestroyed();
         draw();
     }
 
@@ -39,6 +49,7 @@ public class GameScreen extends BaseScreen {
         for (Sprite s : sprites) {
             s.update(delta);
         }
+        bulletPool.updateActiveSprites(delta);
     }
 
     @Override
@@ -57,6 +68,7 @@ public class GameScreen extends BaseScreen {
         for (Sprite s : sprites) {
             s.draw(batch);
         }
+        bulletPool.drawActiveSprites(batch);
 
         batch.end();
     }
@@ -64,6 +76,8 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
+        bulletPool.dispose();
+
     }
 
     @Override

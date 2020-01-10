@@ -6,31 +6,44 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.homework.base.StarShipBase;
 import ru.homework.math.Rect;
+import ru.homework.pool.BulletPool;
 import ru.homework.screen.GameScreen;
 
 public class StarShip extends StarShipBase {
     private static final float SPEED = 0.01f;
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
-    private GameScreen gameScreen;
+
+    private BulletPool bulletPool;
+    private TextureRegion bulletRegion;
+    private float bulletHeight;
+    private Vector2 bulletV;
+    private int damage;
+    //private GameScreen gameScreen;
 
     private float speed = SPEED;
     private Vector2 speedV;
     //Позиция перемещения
     private Vector2 posTo;
 
-    public StarShip(TextureAtlas atlas, GameScreen gameScreen) {
+    public StarShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         TextureRegion region = atlas.findRegion("main_ship");
         //regions[0] = new TextureRegion(region, 0, 0, region.getRegionWidth() / 2, region.getRegionHeight());
         //regions[1] = new TextureRegion(region, region.getRegionWidth() / 2, 0, region.getRegionWidth(), region.getRegionHeight());
 
+        bulletRegion = atlas.findRegion("bulletMainShip");
+        bulletHeight = 0.01f;
+        bulletV = new Vector2(0,0.5f);
+        damage = 1;
+
         this.posTo = new Vector2(pos);
         this.speedV = new Vector2();
-        this.gameScreen = gameScreen;
+        this.bulletPool = bulletPool;
+        //this.gameScreen = gameScreen;
     }
 
-    public StarShip(TextureAtlas atlas, float speed, GameScreen gameScreen) {
-        this(atlas, gameScreen);
+    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool) {
+        this(atlas,bulletPool);
         this.speed = speed;
     }
 
@@ -176,10 +189,7 @@ public class StarShip extends StarShipBase {
         this.posTo.set(pos);
     }
 
-    @Override
-    public void action() {
-        //gameScreen.addSprite(new BulletStarShip(pos.cpy().add(regions[frame].getRegionWidth()/2,regions[frame].getRegionHeight())));
-    }
+
 
     public float getSpeed() {
         return speed;
@@ -189,5 +199,8 @@ public class StarShip extends StarShipBase {
         this.speed = speed;
     }
 
-
+    protected void shoot(){
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this,bulletRegion,pos,bulletV,bulletHeight,worldBounts,damage);
+    }
 }

@@ -74,8 +74,8 @@ public abstract class StarShipBase extends Sprite {
             }
             case Input.Keys.SPACE: {
                 //Установим направление движения
-                vectorTo.set(0, 1);
-                action();
+                //vectorTo.set(0, 1);
+                shoot();
                 break;
             }
             default: {
