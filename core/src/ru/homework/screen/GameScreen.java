@@ -69,7 +69,7 @@ public class GameScreen extends BaseScreen {
         autoTimerCountRender++;
         if (autoTimerCountRender > autoTimerIntervalRender && enemyShipPool.getFreeObjects().size() > 0) {
             EnemyShip enemyShip = enemyShipPool.obtain();
-            enemyShip.set(enemyShipSpeed, 0);
+            enemyShip.set(enemyShipSpeed, 1);
             autoTimerCountRender = 0;
         }
 
