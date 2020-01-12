@@ -19,7 +19,7 @@ public abstract class StarShipBase extends Sprite {
     protected boolean pressedLeft;
     protected boolean pressedUp;
     protected boolean pressedDown;
-    protected Rect worldBounts;
+    protected Rect worldBounds;
 
 
     public StarShipBase(TextureRegion region, int rows, int cols, int frames) {
@@ -28,7 +28,7 @@ public abstract class StarShipBase extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounts = worldBounds;
+        this.worldBounds = worldBounds;
     }
 
 

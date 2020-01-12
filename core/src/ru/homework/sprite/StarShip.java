@@ -21,8 +21,8 @@ public class StarShip extends StarShipBase {
     private Vector2 bulletV;
     private int damage;
     //Поля для автострельбы
-    private int autoTimerCount = 0;
-    private int autoTimerInteval = 30;
+    private int autoTimerCountRender = 0;
+    private int autoTimerIntervalRender = 30;
 
     //Скорость и векор напрвления скорости
     private float speed = SPEED;
@@ -30,9 +30,10 @@ public class StarShip extends StarShipBase {
     //Позиция перемещения
     private Vector2 posTo;
 
+
     public StarShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
-        TextureRegion region = atlas.findRegion("main_ship");
+        //TextureRegion region = atlas.findRegion("main_ship");
         //regions[0] = new TextureRegion(region, 0, 0, region.getRegionWidth() / 2, region.getRegionHeight());
         //regions[1] = new TextureRegion(region, region.getRegionWidth() / 2, 0, region.getRegionWidth(), region.getRegionHeight());
 
@@ -63,22 +64,22 @@ public class StarShip extends StarShipBase {
     @Override
     public void update(float delta) {
         //Чиним что бы карабль не улетал за пределы экрана
-        if (getRight() > worldBounts.getRight()) {
-            setRight(worldBounts.getRight());
+        if (getRight() > worldBounds.getRight()) {
+            setRight(worldBounds.getRight());
             stopActionObject();
         }
-        if (getLeft() < worldBounts.getLeft()) {
-            setLeft(worldBounts.getLeft());
-            stopActionObject();
-        }
-
-        if (getTop() > worldBounts.getTop()) {
-            setTop(worldBounts.getTop());
+        if (getLeft() < worldBounds.getLeft()) {
+            setLeft(worldBounds.getLeft());
             stopActionObject();
         }
 
-        if (getBottom() < worldBounts.getBottom()) {
-            setBottom(worldBounts.getBottom());
+        if (getTop() > worldBounds.getTop()) {
+            setTop(worldBounds.getTop());
+            stopActionObject();
+        }
+
+        if (getBottom() < worldBounds.getBottom()) {
+            setBottom(worldBounds.getBottom());
             stopActionObject();
         }
 
@@ -93,10 +94,10 @@ public class StarShip extends StarShipBase {
         }
 
         //Автострельба
-        autoTimerCount++;
-        if (autoTimerCount > autoTimerInteval) {
+        autoTimerCountRender++;
+        if (autoTimerCountRender > autoTimerIntervalRender) {
             shoot();
-            autoTimerCount = 0;
+            autoTimerCountRender = 0;
         }
     }
 
@@ -129,7 +130,8 @@ public class StarShip extends StarShipBase {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if (touch.x < worldBounts.pos.x) {
+        frame = 1;
+        if (touch.x < worldBounds.pos.x) {
             if (leftPointer != INVALID_POINTER) {
                 return false;
             }
@@ -148,7 +150,7 @@ public class StarShip extends StarShipBase {
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         //stopActionObject();
-
+        frame = 0;
         if (pointer == leftPointer) {
             leftPointer = INVALID_POINTER;
             if (rightPointer != INVALID_POINTER) {
@@ -213,6 +215,6 @@ public class StarShip extends StarShipBase {
     protected void shoot() {
         Bullet bullet = bulletPool.obtain();
         bulletSound.play(0.01f);
-        bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounts, damage);
+        bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
     }
 }
