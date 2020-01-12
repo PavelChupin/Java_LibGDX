@@ -19,40 +19,48 @@ public class GameScreen extends BaseScreen {
 
     //Пулл пуль
     private BulletPool bulletPool;
+    private Sound bulletSound;
 
     //Пул вражеских кораблей
     private EnemyShipPool enemyShipPool;
     private Vector2 enemyShipSpeed;
+    private Sound enemyBulletSound;
     private static final int ENEMY_SHIP_COUNT = 30;
 
     //Таймер для появления вражеских кораблей по запуску Rendera
     private int autoTimerCountRender = 0;
     private int autoTimerIntervalRender = 60;
 
-    private Sound bulletSound;
+
 
     @Override
     public void show() {
         super.show();
 
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+
+        //Формируем звезды
         stars = new Star[64];
         for (int i = 0; i < stars.length; i++) {
             this.sprites.add(new Star(atlas));
         }
 
-        enemyShipPool = new EnemyShipPool();
-        enemyShipSpeed = new Vector2(0, -0.1f);
-
+        //Формируем основной корабль
         bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         bulletPool = new BulletPool();
 
         starShip = new StarShip(atlas, bulletPool, bulletSound);
         sprites.add(starShip);
 
+        //Формируем вражеские корабли
+
+        enemyShipPool = new EnemyShipPool();
+        enemyShipSpeed = new Vector2(0, -0.1f);
+        enemyBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         //Создаем пачку вражеских кораблей.
         for (int i = 0; i < ENEMY_SHIP_COUNT; i++) {
-            EnemyShip enemyShip = new EnemyShip(atlas, enemyShipSpeed, 1);//= enemyShipPool.obtain();
+            BulletPool enemyBulletPool = new BulletPool();
+            EnemyShip enemyShip = new EnemyShip(atlas, enemyBulletPool,enemyShipSpeed, 1,enemyBulletSound);//= enemyShipPool.obtain();
             enemyShipPool.getFreeObjects().add(enemyShip);
         }
     }

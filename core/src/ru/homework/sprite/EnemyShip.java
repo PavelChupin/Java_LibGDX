@@ -1,5 +1,6 @@
 package ru.homework.sprite;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.math.Rnd;
+import ru.homework.pool.BulletPool;
 
 public class EnemyShip extends Sprite {
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
@@ -14,19 +16,29 @@ public class EnemyShip extends Sprite {
     private Vector2 speedV;
     private int damage;
     private Rect worldBounds;
-
+    private BulletPool bulletPool;
+    private Sound bulletSound;
+    private TextureRegion bulletRegion;
+    private float bulletHeight;
+    private Vector2 bulletV;
+    //Поля для автострельбы
+    private int autoTimerCountRender = 0;
+    private int autoTimerIntervalRender = 30;
 
     public EnemyShip() {
         regions = new TextureRegion[1];
         speedV = new Vector2();
     }
 
-    public EnemyShip(TextureAtlas atlas, Vector2 speedV, int damage) {
+    public EnemyShip(TextureAtlas atlas, BulletPool enemyBulletPool, Vector2 speedV, int damage, Sound enemyBulletSound) {
         super(atlas.findRegion("enemy1"), 1, 2, 2);
-
-        this.damage = 1;
-        this.speedV = new Vector2();
-
+        this.bulletPool = enemyBulletPool;
+        this.damage = damage;
+        this.speedV = new Vector2(speedV);
+        this.bulletSound = enemyBulletSound;
+        this.bulletRegion = atlas.findRegion("bulletEnemy");
+        this.bulletHeight = 0.01f;
+        this.bulletV = new Vector2(0, -0.5f);
     }
 
     public void set(
@@ -56,6 +68,13 @@ public class EnemyShip extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(speedV, delta);
+        //Автострельба
+        autoTimerCountRender++;
+        if (autoTimerCountRender > autoTimerIntervalRender) {
+            shoot();
+            autoTimerCountRender = 0;
+        }
+
         if (isOutside(worldBounds)) {
             destroy();
         }
@@ -66,6 +85,12 @@ public class EnemyShip extends Sprite {
         this.worldBounds = worldBounds;
         setHeightProportion(OBJECT_SIZE_PROPORC);
         startPosition();
+    }
+
+    protected void shoot() {
+        Bullet bullet = bulletPool.obtain();
+        bulletSound.play(0.01f);
+        bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
     }
 
 }
