@@ -46,6 +46,7 @@ public abstract class StarShipBase extends Sprite {
 
     public boolean keyDown(int keycode) {
         vectorTo.set(0, 0);
+        frame = 1;
 
         switch (keycode) {
             case Input.Keys.DOWN: {
@@ -87,6 +88,8 @@ public abstract class StarShipBase extends Sprite {
     }
 
     public boolean keyUp(int keycode) {
+        frame = 0;
+
         switch (keycode) {
             case Input.Keys.DOWN: {
                 pressedDown = false;
