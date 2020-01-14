@@ -19,7 +19,7 @@ public abstract class StarShipBase extends Sprite {
     protected boolean pressedLeft;
     protected boolean pressedUp;
     protected boolean pressedDown;
-    protected Rect worldBounts;
+    protected Rect worldBounds;
 
 
     public StarShipBase(TextureRegion region, int rows, int cols, int frames) {
@@ -28,7 +28,7 @@ public abstract class StarShipBase extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounts = worldBounds;
+        this.worldBounds = worldBounds;
     }
 
 
@@ -46,6 +46,7 @@ public abstract class StarShipBase extends Sprite {
 
     public boolean keyDown(int keycode) {
         vectorTo.set(0, 0);
+        frame = 1;
 
         switch (keycode) {
             case Input.Keys.DOWN: {
@@ -87,6 +88,8 @@ public abstract class StarShipBase extends Sprite {
     }
 
     public boolean keyUp(int keycode) {
+        frame = 0;
+
         switch (keycode) {
             case Input.Keys.DOWN: {
                 pressedDown = false;
