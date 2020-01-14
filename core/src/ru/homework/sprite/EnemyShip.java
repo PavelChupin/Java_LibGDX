@@ -30,6 +30,10 @@ public class EnemyShip extends Sprite {
         speedV = new Vector2();
     }
 
+    public BulletPool getBulletPool() {
+        return bulletPool;
+    }
+
     public EnemyShip(TextureAtlas atlas, BulletPool enemyBulletPool, Vector2 speedV, int damage, Sound enemyBulletSound) {
         super(atlas.findRegion("enemy1"), 1, 2, 2);
         this.bulletPool = enemyBulletPool;

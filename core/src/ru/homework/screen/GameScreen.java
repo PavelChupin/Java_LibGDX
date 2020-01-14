@@ -68,6 +68,10 @@ public class GameScreen extends BaseScreen {
     private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveObjects();
         enemyShipPool.freeAllDestroyedActiveObjects();
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
+        {
+            enemyShip.getBulletPool().freeAllDestroyedActiveObjects();
+        }
     }
 
     @Override
@@ -91,7 +95,14 @@ public class GameScreen extends BaseScreen {
             s.update(delta);
         }
         bulletPool.updateActiveSprites(delta);
+
+        //Обновляем движения вражеских кораблей и пуль
         enemyShipPool.updateActiveSprites(delta);
+        //Вражеские пули
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
+        {
+            enemyShip.getBulletPool().updateActiveSprites(delta);
+        }
     }
 
     @Override
@@ -116,6 +127,10 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
+        {
+            enemyShip.getBulletPool().drawActiveSprites(batch);
+        }
         batch.end();
     }
 
@@ -125,6 +140,10 @@ public class GameScreen extends BaseScreen {
         bulletPool.dispose();
         bulletSound.dispose();
         enemyShipPool.dispose();
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
+        {
+            enemyShip.getBulletPool().dispose();
+        }
     }
 
     @Override
