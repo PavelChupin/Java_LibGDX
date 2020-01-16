@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 import ru.homework.base.BaseScreen;
+import ru.homework.base.Ship;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
@@ -54,8 +55,8 @@ public class GameScreen extends BaseScreen {
         this.sprites.add(starShip);
 
         //Формируем вражеские корабли
-        this.enemyShipPool = new EnemyShipPool(bulletPool,enemyBulletSound,worldBounds);
-        this.enemyGenerator = new EnemyGenerator(atlas,enemyShipPool,worldBounds);
+        this.enemyShipPool = new EnemyShipPool(bulletPool, enemyBulletSound, worldBounds);
+        this.enemyGenerator = new EnemyGenerator(atlas, enemyShipPool, worldBounds);
     }
 
     private void freeAllDestroyed() {
@@ -67,6 +68,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkCollisionsBulletToShip();
         checkCollisions();
         freeAllDestroyed();
         draw();
@@ -83,30 +85,59 @@ public class GameScreen extends BaseScreen {
         enemyGenerator.generate(delta);
     }
 
-    private void checkCollisionsBullet(){
+    private void checkCollisionsBulletToShip() {
         List<Bullet> bulletList = bulletPool.getActiveObjects();
 
-        for (Bullet bullet:bulletList) {
-            // Если пуля главного корабля, то проверим ее пересечение с вражеским кораблем.
-            if (bullet.getOwner() == starShip){
-                for (EnemyShip enemyShip:enemyShipPool.getActiveObjects()) {
-                    if (!bullet.isOutside(enemyShip)){
-                        int hp = enemyShip.getHp() - bullet.getDamage();
-                        if (hp <= 0){
-                            enemyShip.destroy();
-                        }else {enemyShip.setHp(hp);}
-                        bullet.destroy();
-                    }
+        for (Bullet bullet : bulletList) {
+            //проверяем соприкосновение пуль и вражеских кораблей
+            if (bullet.getOwner() instanceof StarShip) {
+                if (isHitEnemy(bullet)) {
+                    bullet.destroy();
                 }
             }
-        }
 
+            //проверяем соприкосновение пуль и главного корабля
+            if (bullet.getOwner() instanceof EnemyShip) {
+                if (isHitStarShip(bullet)) {
+                    bullet.destroy();
+                    changeHPForShip(bullet.getOwner(),bullet.getDamage());
+                }
+            }
+
+        }
     }
 
-    private void checkCollisions(){
+    private boolean isHitEnemy(Bullet bullet) {
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
-        for (EnemyShip enemyShip:enemyShipList){
-            if (!enemyShip.isOutside(starShip)){
+        for (EnemyShip enemyShip : enemyShipList) {
+            if (!enemyShip.isOutside(bullet)) {
+                changeHPForShip(enemyShip,bullet.getDamage());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isHitStarShip(Bullet bullet) {
+        if (!starShip.isOutside(bullet)){
+            changeHPForShip(starShip,bullet.getDamage());
+            return true;
+        } else {return false;}
+    }
+
+    private void changeHPForShip(Ship ship, int damange) {
+        int hp = ship.getHp() - damange;
+        if (hp <= 0) {
+            ship.destroy();
+        } else {
+            ship.setHp(hp);
+        }
+    }
+
+    private void checkCollisions() {
+        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
+        for (EnemyShip enemyShip : enemyShipList) {
+            if (!enemyShip.isOutside(starShip)) {
                 enemyShip.destroy();
             }
         }
