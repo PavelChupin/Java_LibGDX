@@ -5,11 +5,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.homework.base.BaseScreen;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.pool.EnemyShipPool;
+import ru.homework.sprite.EnemyShip;
 import ru.homework.sprite.Star;
 import ru.homework.sprite.StarShip;
 import ru.homework.utils.EnemyGenerator;
@@ -24,15 +27,9 @@ public class GameScreen extends BaseScreen {
     //Пул вражеских кораблей
     private EnemyShipPool enemyShipPool;
 
-    //private Vector2 enemyShipSpeed;
     private Sound enemyBulletSound;
 
     private EnemyGenerator enemyGenerator;
-    //private static final int ENEMY_SHIP_COUNT = 30;
-
-    //Таймер для появления вражеских кораблей по запуску Rendera
-    //private float reloadInterval = 3f;
-    //private float reloadTimer = 0f;
 
     @Override
     public void show() {
@@ -69,6 +66,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkCollisions();
         freeAllDestroyed();
         draw();
     }
@@ -84,10 +82,19 @@ public class GameScreen extends BaseScreen {
         enemyGenerator.generate(delta);
     }
 
+    private void checkCollisions(){
+        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
+        for (EnemyShip enemyShip:enemyShipList){
+            if (!enemyShip.isOutside(starShip)){
+                enemyShip.destroy();
+            }
+        }
+    }
+
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        enemyShipPool.resizeActiveSprites(worldBounds);
+        //enemyShipPool.resizeActiveSprites(worldBounds);
 
         for (Sprite s : sprites) {
             s.resize(worldBounds);

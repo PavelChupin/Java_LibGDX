@@ -6,23 +6,21 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.homework.base.Ship;
 import ru.homework.math.Rect;
-import ru.homework.math.Rnd;
 import ru.homework.pool.BulletPool;
 
 public class EnemyShip extends Ship {
-    private static final float OBJECT_SIZE_PROPORC = 0.13f;
+    private enum State {DESCENT, FIGHT}
+    private State state;
 
-    /*public BulletPool getBulletPool() {
-        return bulletPool;
-    }*/
+    private Vector2 descentV = new Vector2(0,-0.15f);
 
     public EnemyShip(BulletPool enemyBulletPool, Sound enemyBulletSound, Rect worldBounds) {
         this.bulletPool = enemyBulletPool;
         this.bulletSound = enemyBulletSound;
         this.bulletV = new Vector2();
-        this.posTo = new Vector2(pos);
+        this.v0 = new Vector2();
         this.speedV = new Vector2();
-        this.worldBounds =  worldBounds;
+        this.worldBounds = worldBounds;
     }
 
     public void set(
@@ -37,7 +35,8 @@ public class EnemyShip extends Ship {
             float height
     ) {
         this.regions = regions;
-        this.speedV.set(speedV);
+        this.speedV.set(descentV);
+        this.v0 = new Vector2(speedV);
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
         this.bulletV.set(0, bulletVY);
@@ -47,43 +46,33 @@ public class EnemyShip extends Ship {
         this.hp = hp;
         setHeightProportion(height);
         //this.v.set(descentV);
+        state = State.DESCENT;
     }
-
-    /*private void startPosition() {
-        float posx = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
-        pos.set(posx, worldBounds.getTop() + getHalfHeight());
-    }*/
 
     @Override
     public void update(float delta) {
-        super.update(delta);
+        //super.update(delta);
         pos.mulAdd(speedV, delta);
-        /*//Автострельба
-        reloadTimer += delta;
-        if (reloadTimer > reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
-        }*/
+        switch (state){
+            case DESCENT:
+                if (getTop() <= worldBounds.getTop()){speedV.set(v0);
+                state = State.FIGHT; }
+                break;
+            case FIGHT:
+                reloadTimer += delta;
+                if (reloadTimer > reloadInterval) {
+                    reloadTimer = 0f;
+                    shoot();
+                }
 
-        /*if (isOutside(worldBounds)) {
+                if (getBottom() < worldBounds.getBottom()){
+                    destroy();
+                }
+                break;
+        }
+
+        if (isOutside(worldBounds)) {
             destroy();
-        }*/
-    }
-
-   /* @Override
-    public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
-        setHeightProportion(OBJECT_SIZE_PROPORC);
-        startPosition();
-    }*/
-
-    /*protected void shoot() {
-        Bullet bullet = bulletPool.obtain();
-        bulletSound.play(0.01f);
-        bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
-    }*/
-    @Override
-    public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
+        }
     }
 }

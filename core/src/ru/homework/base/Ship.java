@@ -49,10 +49,11 @@ public abstract class Ship extends Sprite{
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
     }
 
+    /*
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
-    }
+
+    }*/
 
     @Override
     public void update(float delta) {

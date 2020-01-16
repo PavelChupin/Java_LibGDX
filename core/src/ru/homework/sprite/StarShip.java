@@ -56,6 +56,7 @@ public class StarShip extends Ship {
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
+        this.worldBounds = worldBounds;
         setHeightProportion(OBJECT_SIZE_PROPORC);
         pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
     }
