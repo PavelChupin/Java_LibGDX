@@ -10,78 +10,64 @@ import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.pool.EnemyShipPool;
-import ru.homework.sprite.EnemyShip;
 import ru.homework.sprite.Star;
 import ru.homework.sprite.StarShip;
+import ru.homework.utils.EnemyGenerator;
 
 public class GameScreen extends BaseScreen {
     private StarShip starShip;
 
     //Пулл пуль
     private BulletPool bulletPool;
-    private Sound bulletSound;
+    private Sound mainShipBulletSound;
 
     //Пул вражеских кораблей
     private EnemyShipPool enemyShipPool;
-    private Vector2 enemyShipSpeed;
+
+    //private Vector2 enemyShipSpeed;
     private Sound enemyBulletSound;
-    private static final int ENEMY_SHIP_COUNT = 30;
+
+    private EnemyGenerator enemyGenerator;
+    //private static final int ENEMY_SHIP_COUNT = 30;
 
     //Таймер для появления вражеских кораблей по запуску Rendera
-    private float reloadInterval = 3f;
-    private float reloadTimer = 0f;
+    //private float reloadInterval = 3f;
+    //private float reloadTimer = 0f;
 
     @Override
     public void show() {
         super.show();
 
-        atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+        this.atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
 
         //Формируем звезды
-        stars = new Star[64];
+        this.stars = new Star[64];
         for (int i = 0; i < stars.length; i++) {
             this.sprites.add(new Star(atlas));
         }
 
-        //Формируем основной корабль
-        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
-        bulletPool = new BulletPool();
+        //Формируем звуки
+        this.mainShipBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
+        this.enemyBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
 
-        starShip = new StarShip(atlas, bulletPool, bulletSound);
-        sprites.add(starShip);
+        //Формируем основной корабль
+        this.bulletPool = new BulletPool();
+        this.starShip = new StarShip(atlas, bulletPool, mainShipBulletSound);
+        this.sprites.add(starShip);
 
         //Формируем вражеские корабли
-
-        enemyShipPool = new EnemyShipPool();
-        enemyShipSpeed = new Vector2(0, -0.1f);
-        enemyBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
-        //Создаем пачку вражеских кораблей.
-        for (int i = 0; i < ENEMY_SHIP_COUNT; i++) {
-            BulletPool enemyBulletPool = new BulletPool();
-            EnemyShip enemyShip = new EnemyShip(atlas, enemyBulletPool, enemyShipSpeed, 1, enemyBulletSound);//= enemyShipPool.obtain();
-            enemyShipPool.getFreeObjects().add(enemyShip);
-        }
+        this.enemyShipPool = new EnemyShipPool(bulletPool,enemyBulletSound,worldBounds);
+        this.enemyGenerator = new EnemyGenerator(atlas,enemyShipPool,worldBounds);
     }
 
     private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveObjects();
         enemyShipPool.freeAllDestroyedActiveObjects();
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
-            enemyShip.getBulletPool().freeAllDestroyedActiveObjects();
-        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        //Вражеские корабли
-        reloadTimer += delta;
-        if (reloadTimer > reloadInterval && enemyShipPool.getFreeObjects().size() > 0) {
-            reloadTimer = 0f;
-            EnemyShip enemyShip = enemyShipPool.obtain();
-            enemyShip.set(enemyShipSpeed, 1);
-        }
-
         update(delta);
         freeAllDestroyed();
         draw();
@@ -95,19 +81,13 @@ public class GameScreen extends BaseScreen {
 
         //Обновляем движения вражеских кораблей и пуль
         enemyShipPool.updateActiveSprites(delta);
-        //Вражеские пули
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
-            enemyShip.getBulletPool().updateActiveSprites(delta);
-        }
+        enemyGenerator.generate(delta);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-
-        for (EnemyShip e : enemyShipPool.getFreeObjects()) {
-            e.resize(worldBounds);
-        }
+        enemyShipPool.resizeActiveSprites(worldBounds);
 
         for (Sprite s : sprites) {
             s.resize(worldBounds);
@@ -123,9 +103,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
-            enemyShip.getBulletPool().drawActiveSprites(batch);
-        }
+
         batch.end();
     }
 
@@ -133,12 +111,9 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         bulletPool.dispose();
-        bulletSound.dispose();
+        mainShipBulletSound.dispose();
         enemyShipPool.dispose();
         enemyBulletSound.dispose();
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
-            enemyShip.getBulletPool().dispose();
-        }
     }
 
     @Override

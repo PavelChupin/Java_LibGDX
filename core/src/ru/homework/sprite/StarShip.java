@@ -33,16 +33,18 @@ public class StarShip extends Ship {
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
 
-        bulletRegion = atlas.findRegion("bulletMainShip");
-        bulletHeight = 0.01f;
-        bulletV = new Vector2(0, 0.5f);
-        damage = 1;
+        this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.bulletHeight = 0.01f;
+        this.bulletV = new Vector2(0, 0.5f);
+        this.damage = 1;
 
         this.posTo = new Vector2(pos);
         this.speedV = new Vector2();
 
-        reloadInterval = 0.25f;
-        reloadTimer = 0f;
+        this.reloadInterval = 0.25f;
+        this.reloadTimer = 0f;
+
+        this.hp = 100;
     }
 
     public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {

@@ -24,6 +24,7 @@ public abstract class Ship extends Sprite{
     protected float reloadInterval;
     protected float reloadTimer;
 
+    protected int hp;
 
     //Скорость
     protected float speed = SPEED;
@@ -31,6 +32,9 @@ public abstract class Ship extends Sprite{
     protected Vector2 speedV;
     //Позиция перемещения
     protected Vector2 posTo;
+
+
+    protected Vector2 v0;
 
     public Ship() {
     }
