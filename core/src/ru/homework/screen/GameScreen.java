@@ -100,7 +100,6 @@ public class GameScreen extends BaseScreen {
             if (bullet.getOwner() instanceof EnemyShip) {
                 if (isHitStarShip(bullet)) {
                     bullet.destroy();
-                    changeHPForShip(bullet.getOwner(),bullet.getDamage());
                 }
             }
 
@@ -128,6 +127,7 @@ public class GameScreen extends BaseScreen {
     private void changeHPForShip(Ship ship, int damange) {
         int hp = ship.getHp() - damange;
         if (hp <= 0) {
+            ship.setHp(0);
             ship.destroy();
         } else {
             ship.setHp(hp);
@@ -139,6 +139,8 @@ public class GameScreen extends BaseScreen {
         for (EnemyShip enemyShip : enemyShipList) {
             if (!enemyShip.isOutside(starShip)) {
                 enemyShip.destroy();
+                //Наносим нашему кораблю урон от столкновения
+                changeHPForShip(starShip,10);
             }
         }
     }
