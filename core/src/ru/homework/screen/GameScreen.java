@@ -12,6 +12,7 @@ import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.pool.EnemyShipPool;
+import ru.homework.sprite.Bullet;
 import ru.homework.sprite.EnemyShip;
 import ru.homework.sprite.Star;
 import ru.homework.sprite.StarShip;
@@ -80,6 +81,26 @@ public class GameScreen extends BaseScreen {
         //Обновляем движения вражеских кораблей и пуль
         enemyShipPool.updateActiveSprites(delta);
         enemyGenerator.generate(delta);
+    }
+
+    private void checkCollisionsBullet(){
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
+
+        for (Bullet bullet:bulletList) {
+            // Если пуля главного корабля, то проверим ее пересечение с вражеским кораблем.
+            if (bullet.getOwner() == starShip){
+                for (EnemyShip enemyShip:enemyShipPool.getActiveObjects()) {
+                    if (!bullet.isOutside(enemyShip)){
+                        int hp = enemyShip.getHp() - bullet.getDamage();
+                        if (hp <= 0){
+                            enemyShip.destroy();
+                        }else {enemyShip.setHp(hp);}
+                        bullet.destroy();
+                    }
+                }
+            }
+        }
+
     }
 
     private void checkCollisions(){
