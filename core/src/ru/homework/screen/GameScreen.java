@@ -30,10 +30,6 @@ public class GameScreen extends BaseScreen {
     //Таймер для появления вражеских кораблей по запуску Rendera
     private float reloadInterval = 3f;
     private float reloadTimer = 0f;
-    //private int autoTimerCountRender = 0;
-    //private int autoTimerIntervalRender = 60;
-
-
 
     @Override
     public void show() {
@@ -62,7 +58,7 @@ public class GameScreen extends BaseScreen {
         //Создаем пачку вражеских кораблей.
         for (int i = 0; i < ENEMY_SHIP_COUNT; i++) {
             BulletPool enemyBulletPool = new BulletPool();
-            EnemyShip enemyShip = new EnemyShip(atlas, enemyBulletPool,enemyShipSpeed, 1,enemyBulletSound);//= enemyShipPool.obtain();
+            EnemyShip enemyShip = new EnemyShip(atlas, enemyBulletPool, enemyShipSpeed, 1, enemyBulletSound);//= enemyShipPool.obtain();
             enemyShipPool.getFreeObjects().add(enemyShip);
         }
     }
@@ -70,8 +66,7 @@ public class GameScreen extends BaseScreen {
     private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveObjects();
         enemyShipPool.freeAllDestroyedActiveObjects();
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
-        {
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
             enemyShip.getBulletPool().freeAllDestroyedActiveObjects();
         }
     }
@@ -81,17 +76,11 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         //Вражеские корабли
         reloadTimer += delta;
-        if (reloadTimer > reloadInterval && enemyShipPool.getFreeObjects().size() > 0){
+        if (reloadTimer > reloadInterval && enemyShipPool.getFreeObjects().size() > 0) {
             reloadTimer = 0f;
             EnemyShip enemyShip = enemyShipPool.obtain();
             enemyShip.set(enemyShipSpeed, 1);
         }
-        /*autoTimerCountRender++;
-        if (autoTimerCountRender > autoTimerIntervalRender && enemyShipPool.getFreeObjects().size() > 0) {
-            EnemyShip enemyShip = enemyShipPool.obtain();
-            enemyShip.set(enemyShipSpeed, 1);
-            autoTimerCountRender = 0;
-        }*/
 
         update(delta);
         freeAllDestroyed();
@@ -107,8 +96,7 @@ public class GameScreen extends BaseScreen {
         //Обновляем движения вражеских кораблей и пуль
         enemyShipPool.updateActiveSprites(delta);
         //Вражеские пули
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
-        {
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
             enemyShip.getBulletPool().updateActiveSprites(delta);
         }
     }
@@ -135,8 +123,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
-        {
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
             enemyShip.getBulletPool().drawActiveSprites(batch);
         }
         batch.end();
@@ -149,8 +136,7 @@ public class GameScreen extends BaseScreen {
         bulletSound.dispose();
         enemyShipPool.dispose();
         enemyBulletSound.dispose();
-        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
-        {
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
             enemyShip.getBulletPool().dispose();
         }
     }

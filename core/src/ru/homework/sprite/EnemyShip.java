@@ -24,8 +24,6 @@ public class EnemyShip extends Sprite {
     //Поля для автострельбы
     private float reloadInterval = 0.5f;
     private float reloadTimer = 0f;
-    //private int autoTimerCountRender = 0;
-    //private int autoTimerIntervalRender = 30;
 
     public EnemyShip() {
         regions = new TextureRegion[1];
@@ -76,15 +74,10 @@ public class EnemyShip extends Sprite {
         pos.mulAdd(speedV, delta);
         //Автострельба
         reloadTimer += delta;
-        if (reloadTimer > reloadInterval){
+        if (reloadTimer > reloadInterval) {
             reloadTimer = 0f;
             shoot();
         }
-        /*autoTimerCountRender++;
-        if (autoTimerCountRender > autoTimerIntervalRender) {
-            shoot();
-            autoTimerCountRender = 0;
-        }*/
 
         if (isOutside(worldBounds)) {
             destroy();

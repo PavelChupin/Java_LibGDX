@@ -23,8 +23,6 @@ public class StarShip extends StarShipBase {
     //Поля для автострельбы
     private float reloadInterval = 0.5f;
     private float reloadTimer = 0f;
-    //private int autoTimerCountRender = 0;
-    //private int autoTimerIntervalRender = 30;
 
     //Скорость и векор напрвления скорости
     private float speed = SPEED;
@@ -101,11 +99,6 @@ public class StarShip extends StarShipBase {
             reloadTimer = 0f;
             shoot();
         }
-        /*autoTimerCountRender++;
-        if (autoTimerCountRender > autoTimerIntervalRender) {
-            shoot();
-            autoTimerCountRender = 0;
-        }*/
     }
 
     @Override
