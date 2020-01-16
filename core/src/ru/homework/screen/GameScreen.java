@@ -140,6 +140,7 @@ public class GameScreen extends BaseScreen {
         bulletPool.dispose();
         bulletSound.dispose();
         enemyShipPool.dispose();
+        enemyBulletSound.dispose();
         for (EnemyShip enemyShip : enemyShipPool.getActiveObjects())
         {
             enemyShip.getBulletPool().dispose();
