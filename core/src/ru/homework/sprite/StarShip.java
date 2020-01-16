@@ -1,41 +1,37 @@
 package ru.homework.sprite;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.homework.base.StarShipBase;
+import ru.homework.base.Ship;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 
-public class StarShip extends StarShipBase {
-    private static final float SPEED = 0.01f;
+public class StarShip extends Ship {
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
 
-    //Поля для пула пуль
-    private Sound bulletSound;
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private float bulletHeight;
-    private Vector2 bulletV;
-    private int damage;
-    //Поля для автострельбы
-    private float reloadInterval = 0.5f;
-    private float reloadTimer = 0f;
+    protected static final int INVALID_POINTER = -1;
 
-    //Скорость и векор напрвления скорости
-    private float speed = SPEED;
-    private Vector2 speedV;
-    //Позиция перемещения
-    private Vector2 posTo;
+    protected int leftPointer = INVALID_POINTER;
+    protected int rightPointer = INVALID_POINTER;
 
+    //Вектор направления для рассчетов
+    protected Vector2 vectorTo = new Vector2();
+    protected Vector2 vectorBorder = new Vector2(1f, 1f);
+    protected boolean pressedRight;
+    protected boolean pressedLeft;
+    protected boolean pressedUp;
+    protected boolean pressedDown;
 
     public StarShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         //TextureRegion region = atlas.findRegion("main_ship");
         //regions[0] = new TextureRegion(region, 0, 0, region.getRegionWidth() / 2, region.getRegionHeight());
         //regions[1] = new TextureRegion(region, region.getRegionWidth() / 2, 0, region.getRegionWidth(), region.getRegionHeight());
+        this.bulletPool = bulletPool;
+        this.bulletSound = bulletSound;
 
         bulletRegion = atlas.findRegion("bulletMainShip");
         bulletHeight = 0.01f;
@@ -44,8 +40,9 @@ public class StarShip extends StarShipBase {
 
         this.posTo = new Vector2(pos);
         this.speedV = new Vector2();
-        this.bulletPool = bulletPool;
-        this.bulletSound = bulletSound;
+
+        reloadInterval = 0.25f;
+        reloadTimer = 0f;
     }
 
     public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {
@@ -63,6 +60,7 @@ public class StarShip extends StarShipBase {
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         //Чиним что бы карабль не улетал за пределы экрана
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
@@ -92,19 +90,48 @@ public class StarShip extends StarShipBase {
         } else {
             stopActionObject();
         }
-
-        //Автострельба
-        reloadTimer += delta;
-        if (reloadTimer > reloadInterval){
-            reloadTimer = 0f;
-            shoot();
-        }
     }
 
     @Override
     public boolean keyDown(int keycode) {
         //Выполняем метод нажатия кнопки
-        super.keyDown(keycode);
+        vectorTo.set(0, 0);
+        frame = 1;
+
+        switch (keycode) {
+            case Input.Keys.DOWN: {
+                //Установим направление движения
+                vectorTo.set(0, -1);
+                pressedDown = true;
+                break;
+            }
+            case Input.Keys.UP: {
+                //Установим направление движения
+                vectorTo.set(0, 1);
+                pressedUp = true;
+                break;
+            }
+            case Input.Keys.LEFT: {
+                //Установим направление движения
+                vectorTo.set(-1, 0);
+                pressedLeft = true;
+                break;
+            }
+            case Input.Keys.RIGHT: {
+                //Установим направление движения
+                vectorTo.set(1, 0);
+                pressedRight = true;
+                break;
+            }
+            case Input.Keys.SPACE: {
+                //Установим направление движения
+                shoot();
+                break;
+            }
+            default: {
+                break;
+            }
+        }
 
         //Перехватим движение объекта в текущей точке
         stopActionObject();
@@ -118,9 +145,42 @@ public class StarShip extends StarShipBase {
 
     @Override
     public boolean keyUp(int keycode) {
-        stopActionObject();
+        frame = 0;
+        switch (keycode) {
+            case Input.Keys.DOWN: {
+                pressedDown = false;
+                if (pressedUp) {
+                    vectorTo.set(0, 1);
+                }
+                break;
+            }
+            case Input.Keys.UP: {
+                pressedUp = false;
+                if (pressedDown) {
+                    vectorTo.set(0, -1);
+                }
+                break;
+            }
+            case Input.Keys.LEFT: {
+                pressedLeft = false;
+                if (pressedRight) {
+                    vectorTo.set(1, 0);
+                }
+                break;
+            }
+            case Input.Keys.RIGHT: {
+                pressedRight = false;
+                if (pressedLeft) {
+                    vectorTo.set(-1, 0);
+                }
+                break;
+            }
+            default: {
+                break;
+            }
+        }
 
-        super.keyUp(keycode);
+        stopActionObject();
 
         //Меняем направление движения объекта
         changePosToKeyDown(vectorTo);
@@ -212,9 +272,5 @@ public class StarShip extends StarShipBase {
         this.speed = speed;
     }
 
-    protected void shoot() {
-        Bullet bullet = bulletPool.obtain();
-        bulletSound.play(0.01f);
-        bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
-    }
+
 }
