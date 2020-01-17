@@ -65,11 +65,13 @@ public abstract class Ship extends Sprite{
         }
     }
 
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
+     public void changeHP(int damange) {
+        int hp = this.hp - damange;
+        if (hp <= 0) {
+            this.hp = 0;
+            destroy();
+        } else {
+            this.hp = hp;
+        }
     }
 }

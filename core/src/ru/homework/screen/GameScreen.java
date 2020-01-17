@@ -110,7 +110,8 @@ public class GameScreen extends BaseScreen {
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
         for (EnemyShip enemyShip : enemyShipList) {
             if (!enemyShip.isOutside(bullet)) {
-                changeHPForShip(enemyShip,bullet.getDamage());
+                enemyShip.changeHP(bullet.getDamage());
+                //changeHPForShip(enemyShip,bullet.getDamage());
                 return true;
             }
         }
@@ -119,20 +120,13 @@ public class GameScreen extends BaseScreen {
 
     private boolean isHitStarShip(Bullet bullet) {
         if (!starShip.isOutside(bullet)){
-            changeHPForShip(starShip,bullet.getDamage());
+            starShip.changeHP(bullet.getDamage());
+            //changeHPForShip(starShip,bullet.getDamage());
             return true;
         } else {return false;}
     }
 
-    private void changeHPForShip(Ship ship, int damange) {
-        int hp = ship.getHp() - damange;
-        if (hp <= 0) {
-            ship.setHp(0);
-            ship.destroy();
-        } else {
-            ship.setHp(hp);
-        }
-    }
+
 
     private void checkCollisions() {
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
@@ -140,7 +134,7 @@ public class GameScreen extends BaseScreen {
             if (!enemyShip.isOutside(starShip)) {
                 enemyShip.destroy();
                 //Наносим нашему кораблю урон от столкновения
-                changeHPForShip(starShip,10);
+                starShip.changeHP(10);
             }
         }
     }
