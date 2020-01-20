@@ -3,6 +3,7 @@ package ru.homework.sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.homework.base.Ship;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 
@@ -11,7 +12,7 @@ public class Bullet extends Sprite {
     private Rect worldBounds;
     private Vector2 v;
     private int damage;
-    private Sprite owner;
+    private Ship owner;
 
     public Bullet() {
         regions = new TextureRegion[1];
@@ -19,7 +20,7 @@ public class Bullet extends Sprite {
     }
 
     public void set(
-            Sprite owner,
+            Ship owner,
             TextureRegion region,
             Vector2 pos0,
             Vector2 v0,
@@ -48,7 +49,7 @@ public class Bullet extends Sprite {
         return damage;
     }
 
-    public Sprite getOwner() {
+    public Ship getOwner() {
         return owner;
     }
 }

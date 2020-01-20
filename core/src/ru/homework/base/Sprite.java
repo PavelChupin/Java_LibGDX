@@ -1,6 +1,5 @@
 package ru.homework.base;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -20,13 +19,6 @@ public abstract class Sprite extends Rect {
     public Sprite() {
     }
 
-/*public Sprite(int frames) {
-        if (frames == 0) {
-            throw new RuntimeException("Count texture set 0");
-        }
-        regions = new TextureRegion[frames];
-    }*/
-
     public Sprite(TextureRegion region) {
         if (region == null) {
             throw new NullPointerException("Region is null");
@@ -35,11 +27,11 @@ public abstract class Sprite extends Rect {
         regions[0] = region;
     }
 
-    public Sprite(TextureRegion region, int rows, int cols, int frames){
+    public Sprite(TextureRegion region, int rows, int cols, int frames) {
         if (region == null) {
             throw new NullPointerException("Region is null");
         }
-        regions = Regions.split(region,rows,cols,frames);
+        regions = Regions.split(region, rows, cols, frames);
     }
 
     public void setHeightProportion(float height) {
@@ -60,13 +52,15 @@ public abstract class Sprite extends Rect {
     }
 
 
-    public  void resize(Rect worldBounds){}
+    public void resize(Rect worldBounds) {
+    }
 
     public void update(float delta) {
 
     }
 
-   protected void shoot(){}
+    protected void shoot() {
+    }
 
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         return false;

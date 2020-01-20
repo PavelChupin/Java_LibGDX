@@ -8,10 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 import ru.homework.base.BaseScreen;
+import ru.homework.base.Ship;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.pool.EnemyShipPool;
+import ru.homework.sprite.Bullet;
 import ru.homework.sprite.EnemyShip;
 import ru.homework.sprite.Star;
 import ru.homework.sprite.StarShip;
@@ -53,8 +55,8 @@ public class GameScreen extends BaseScreen {
         this.sprites.add(starShip);
 
         //Формируем вражеские корабли
-        this.enemyShipPool = new EnemyShipPool(bulletPool,enemyBulletSound,worldBounds);
-        this.enemyGenerator = new EnemyGenerator(atlas,enemyShipPool,worldBounds);
+        this.enemyShipPool = new EnemyShipPool(bulletPool, enemyBulletSound, worldBounds);
+        this.enemyGenerator = new EnemyGenerator(atlas, enemyShipPool, worldBounds);
     }
 
     private void freeAllDestroyed() {
@@ -66,6 +68,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkCollisionsBulletToShip();
         checkCollisions();
         freeAllDestroyed();
         draw();
@@ -82,11 +85,56 @@ public class GameScreen extends BaseScreen {
         enemyGenerator.generate(delta);
     }
 
-    private void checkCollisions(){
+    private void checkCollisionsBulletToShip() {
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
+
+        for (Bullet bullet : bulletList) {
+            //проверяем соприкосновение пуль и вражеских кораблей
+            if (bullet.getOwner() instanceof StarShip) {
+                if (isHitEnemy(bullet)) {
+                    bullet.destroy();
+                }
+            }
+
+            //проверяем соприкосновение пуль и главного корабля
+            if (bullet.getOwner() instanceof EnemyShip) {
+                if (isHitStarShip(bullet)) {
+                    bullet.destroy();
+                }
+            }
+
+        }
+    }
+
+    private boolean isHitEnemy(Bullet bullet) {
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
-        for (EnemyShip enemyShip:enemyShipList){
-            if (!enemyShip.isOutside(starShip)){
+        for (EnemyShip enemyShip : enemyShipList) {
+            if (!enemyShip.isOutside(bullet)) {
+                enemyShip.changeHP(bullet.getDamage());
+                //changeHPForShip(enemyShip,bullet.getDamage());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isHitStarShip(Bullet bullet) {
+        if (!starShip.isOutside(bullet)){
+            starShip.changeHP(bullet.getDamage());
+            //changeHPForShip(starShip,bullet.getDamage());
+            return true;
+        } else {return false;}
+    }
+
+
+
+    private void checkCollisions() {
+        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
+        for (EnemyShip enemyShip : enemyShipList) {
+            if (!enemyShip.isOutside(starShip)) {
                 enemyShip.destroy();
+                //Наносим нашему кораблю урон от столкновения
+                starShip.changeHP(10);
             }
         }
     }

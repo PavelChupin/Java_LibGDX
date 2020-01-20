@@ -64,4 +64,14 @@ public abstract class Ship extends Sprite{
             shoot();
         }
     }
+
+     public void changeHP(int damange) {
+        int hp = this.hp - damange;
+        if (hp <= 0) {
+            this.hp = 0;
+            destroy();
+        } else {
+            this.hp = hp;
+        }
+    }
 }
