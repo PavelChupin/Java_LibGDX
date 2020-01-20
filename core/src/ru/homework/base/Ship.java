@@ -7,9 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.sprite.Bullet;
-import ru.homework.sprite.StarShip;
 
-public abstract class Ship extends Sprite{
+public abstract class Ship extends Sprite {
     private static final float SPEED = 0.01f;
 
     protected Rect worldBounds;
@@ -24,6 +23,9 @@ public abstract class Ship extends Sprite{
     //Поля для автострельбы
     protected float reloadInterval;
     protected float reloadTimer;
+
+    protected float damageAnimateInterval = 0.1f;
+    protected float damageAnimateTimer = damageAnimateInterval;
 
     protected int hp;
 
@@ -58,11 +60,10 @@ public abstract class Ship extends Sprite{
 
     @Override
     public void update(float delta) {
-        //Автострельба
-        reloadTimer += delta;
-        if (reloadTimer > reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
+
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= damageAnimateInterval) {
+            frame = 0;
         }
     }
 
@@ -76,5 +77,9 @@ public abstract class Ship extends Sprite{
             destroy();
             this.hp = 0;
         }
+
+        frame = 1;
+        damageAnimateTimer = 0f;
+
     }
 }

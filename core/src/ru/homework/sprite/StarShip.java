@@ -93,6 +93,13 @@ public class StarShip extends Ship {
         } else {
             stopActionObject();
         }
+
+        //Автострельба
+        reloadTimer += delta;
+        if (reloadTimer > reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
+        }
     }
 
     @Override
