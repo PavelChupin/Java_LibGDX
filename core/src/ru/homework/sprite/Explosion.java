@@ -34,5 +34,6 @@ public class Explosion extends Sprite {
     public void destroy() {
         super.destroy();
         frame = 0;
+
     }
 }
