@@ -44,7 +44,7 @@ public class StarShip extends Ship {
         this.reloadInterval = 0.25f;
         this.reloadTimer = 0f;
 
-        this.hp = 10;
+        this.hp = 100;
     }
 
     public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {
@@ -99,7 +99,7 @@ public class StarShip extends Ship {
     public boolean keyDown(int keycode) {
         //Выполняем метод нажатия кнопки
         vectorTo.set(0, 0);
-        frame = 1;
+        //frame = 1;
 
         switch (keycode) {
             case Input.Keys.DOWN: {
@@ -148,7 +148,7 @@ public class StarShip extends Ship {
 
     @Override
     public boolean keyUp(int keycode) {
-        frame = 0;
+        //frame = 0;
         switch (keycode) {
             case Input.Keys.DOWN: {
                 pressedDown = false;
@@ -193,7 +193,7 @@ public class StarShip extends Ship {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        frame = 1;
+        //frame = 1;
         if (touch.x < worldBounds.pos.x) {
             if (leftPointer != INVALID_POINTER) {
                 return false;
@@ -213,7 +213,7 @@ public class StarShip extends Ship {
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         //stopActionObject();
-        frame = 0;
+        //frame = 0;
         if (pointer == leftPointer) {
             leftPointer = INVALID_POINTER;
             if (rightPointer != INVALID_POINTER) {
@@ -275,5 +275,12 @@ public class StarShip extends Ship {
         this.speed = speed;
     }
 
+
+    public boolean isBulletCollision(Rect bullet){
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom());
+    }
 
 }

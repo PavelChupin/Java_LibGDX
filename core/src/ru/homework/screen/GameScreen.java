@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 import ru.homework.base.BaseScreen;
-import ru.homework.base.Ship;
 import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
@@ -68,7 +67,6 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
-        checkCollisionsBulletToShip();
         checkCollisions();
         freeAllDestroyed();
         draw();
@@ -76,13 +74,40 @@ public class GameScreen extends BaseScreen {
 
     private void update(float delta) {
         for (Sprite s : sprites) {
-            s.update(delta);
+
+            if (s instanceof StarShip && !starShip.isDestroyed()) {
+                if (!s.isDestroyed()){s.update(delta);}
+            } else {
+                s.update(delta);
+            }
         }
+
         bulletPool.updateActiveSprites(delta);
 
         //Обновляем движения вражеских кораблей и пуль
         enemyShipPool.updateActiveSprites(delta);
         enemyGenerator.generate(delta);
+    }
+
+    private void checkCollisions() {
+        //Проверяем столкновения кораблей
+        checkCollisionsShips();
+
+        //Проверяем попадания пуль
+        checkCollisionsBulletToShip();
+    }
+
+    private void checkCollisionsShips() {
+        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
+        for (EnemyShip enemyShip : enemyShipList) {
+            float minDist = enemyShip.getHalfWidth() + starShip.getHalfWidth();
+
+            if (enemyShip.pos.dst(starShip.pos) < minDist) {
+                enemyShip.destroy();
+                //Наносим нашему кораблю урон от столкновения
+                starShip.damage(enemyShip.getDamage());
+            }
+        }
     }
 
     private void checkCollisionsBulletToShip() {
@@ -109,9 +134,8 @@ public class GameScreen extends BaseScreen {
     private boolean isHitEnemy(Bullet bullet) {
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
         for (EnemyShip enemyShip : enemyShipList) {
-            if (!enemyShip.isOutside(bullet)) {
-                enemyShip.changeHP(bullet.getDamage());
-                //changeHPForShip(enemyShip,bullet.getDamage());
+            if (enemyShip.isBulletCollision(bullet)) {
+                enemyShip.damage(bullet.getDamage());
                 return true;
             }
         }
@@ -119,30 +143,18 @@ public class GameScreen extends BaseScreen {
     }
 
     private boolean isHitStarShip(Bullet bullet) {
-        if (!starShip.isOutside(bullet)){
-            starShip.changeHP(bullet.getDamage());
-            //changeHPForShip(starShip,bullet.getDamage());
+        if (starShip.isBulletCollision(bullet)) {
+            starShip.damage(bullet.getDamage());
             return true;
-        } else {return false;}
-    }
-
-
-
-    private void checkCollisions() {
-        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
-        for (EnemyShip enemyShip : enemyShipList) {
-            if (!enemyShip.isOutside(starShip)) {
-                enemyShip.destroy();
-                //Наносим нашему кораблю урон от столкновения
-                starShip.changeHP(10);
-            }
+        } else {
+            return false;
         }
     }
+
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        //enemyShipPool.resizeActiveSprites(worldBounds);
 
         for (Sprite s : sprites) {
             s.resize(worldBounds);
@@ -154,7 +166,11 @@ public class GameScreen extends BaseScreen {
 
         //Отрисовываем все объекты
         for (Sprite s : sprites) {
-            s.draw(batch);
+            if (s instanceof StarShip) {
+                if (!s.isDestroyed()){s.draw(batch);}
+            } else {
+                s.draw(batch);
+            }
         }
         bulletPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);

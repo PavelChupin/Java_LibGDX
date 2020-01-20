@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.sprite.Bullet;
+import ru.homework.sprite.StarShip;
 
 public abstract class Ship extends Sprite{
     private static final float SPEED = 0.01f;
@@ -65,13 +66,15 @@ public abstract class Ship extends Sprite{
         }
     }
 
-     public void changeHP(int damange) {
-        int hp = this.hp - damange;
-        if (hp <= 0) {
-            this.hp = 0;
+    public int getDamage() {
+        return damage;
+    }
+
+    public void damage(int damange) {
+        this.hp -= damange;
+        if (this.hp <= 0) {
             destroy();
-        } else {
-            this.hp = hp;
+            this.hp = 0;
         }
     }
 }
