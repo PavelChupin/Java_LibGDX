@@ -46,7 +46,7 @@ public class StarShip extends Ship {
         this.reloadInterval = 0.25f;
         this.reloadTimer = 0f;
 
-        this.hp = 100;
+        this.hp = 10;
     }
 
     public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {

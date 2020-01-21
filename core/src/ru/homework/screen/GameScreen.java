@@ -20,22 +20,30 @@ import ru.homework.sprite.StarShip;
 import ru.homework.utils.EnemyGenerator;
 
 public class GameScreen extends BaseScreen {
+
+    private enum State {PLAYING, GAME_OVER}
+
+    ;
+
     private StarShip starShip;
+
+    private Sound mainShipBulletSound;
+    private Sound explosionSound;
+    private Sound enemyBulletSound;
 
     //Пулл пуль
     private BulletPool bulletPool;
-    private Sound mainShipBulletSound;
 
     //Пул вражеских кораблей
     private EnemyShipPool enemyShipPool;
 
+    //Пул взрывов
     private ExplosionPool explosionPool;
 
-    private Sound enemyBulletSound;
-
+    //Генерация вражеских кораблей
     private EnemyGenerator enemyGenerator;
 
-    private Sound explosionSound;
+    private State state;
 
     @Override
     public void show() {
@@ -59,11 +67,12 @@ public class GameScreen extends BaseScreen {
         this.bulletPool = new BulletPool();
         this.explosionPool = new ExplosionPool(atlas, explosionSound);
         this.starShip = new StarShip(atlas, bulletPool, explosionPool, mainShipBulletSound);
-        this.sprites.add(starShip);
+        //this.sprites.add(starShip);
 
         //Формируем вражеские корабли
         this.enemyShipPool = new EnemyShipPool(bulletPool, explosionPool, enemyBulletSound, worldBounds);
         this.enemyGenerator = new EnemyGenerator(atlas, enemyShipPool, worldBounds);
+        this.state = State.PLAYING;
     }
 
     private void freeAllDestroyed() {
@@ -83,29 +92,32 @@ public class GameScreen extends BaseScreen {
 
     private void update(float delta) {
         for (Sprite s : sprites) {
-
-            if (s instanceof StarShip && !starShip.isDestroyed()) {
-                if (!s.isDestroyed()) {
-                    s.update(delta);
-                }
-            } else {
-                s.update(delta);
-            }
+            s.update(delta);
         }
-
-        bulletPool.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
-        //Обновляем движения вражеских кораблей и пуль
-        enemyShipPool.updateActiveSprites(delta);
-        enemyGenerator.generate(delta);
+
+        if (state == State.PLAYING) {
+            starShip.update(delta);
+            bulletPool.updateActiveSprites(delta);
+
+            //Обновляем движения вражеских кораблей и пуль
+            enemyShipPool.updateActiveSprites(delta);
+            enemyGenerator.generate(delta);
+        }
     }
 
     private void checkCollisions() {
-        //Проверяем столкновения кораблей
-        checkCollisionsShips();
+        if (state == State.PLAYING) {
+            //Проверяем столкновения кораблей
+            checkCollisionsShips();
 
-        //Проверяем попадания пуль
-        checkCollisionsBulletToShip();
+            //Проверяем попадания пуль
+            checkCollisionsBulletToShip();
+
+            if (starShip.isDestroyed()){
+                state = State.GAME_OVER;
+            }
+        }
     }
 
     private void checkCollisionsShips() {
@@ -170,6 +182,8 @@ public class GameScreen extends BaseScreen {
         for (Sprite s : sprites) {
             s.resize(worldBounds);
         }
+
+        starShip.resize(worldBounds);
     }
 
     private void draw() {
@@ -177,18 +191,15 @@ public class GameScreen extends BaseScreen {
 
         //Отрисовываем все объекты
         for (Sprite s : sprites) {
-            if (s instanceof StarShip) {
-                if (!s.isDestroyed()) {
-                    s.draw(batch);
-                }
-            } else {
-                s.draw(batch);
-            }
+            s.draw(batch);
         }
-        bulletPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
-        enemyShipPool.drawActiveSprites(batch);
 
+        if (state == State.PLAYING) {
+            starShip.draw(batch);
+            bulletPool.drawActiveSprites(batch);
+            enemyShipPool.drawActiveSprites(batch);
+        }
         batch.end();
     }
 
@@ -205,8 +216,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        for (Sprite s : sprites) {
-            s.touchDown(touch, pointer, button);
+        if (state == State.PLAYING) {
+            starShip.touchDown(touch, pointer, button);
         }
 
         return false;
@@ -214,8 +225,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        for (Sprite s : sprites) {
-            s.touchUp(touch, pointer, button);
+        if (state == State.PLAYING) {
+            starShip.touchUp(touch, pointer, button);
         }
         return false;
     }
@@ -223,27 +234,25 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean keyDown(int keycode) {
         System.out.println("keyDown keycode = " + keycode);
-
-        for (Sprite s : sprites) {
-            s.keyDown(keycode);
+        if (state == State.PLAYING) {
+            starShip.keyDown(keycode);
         }
-
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         System.out.println("keyUp keycode = " + keycode);
-        for (Sprite s : sprites) {
-            s.keyUp(keycode);
+        if (state == State.PLAYING) {
+            starShip.keyUp(keycode);
         }
         return false;
     }
 
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
-        for (Sprite s : sprites) {
-            s.touchDragged(touch, pointer);
+        if (state == State.PLAYING) {
+            starShip.touchDragged(touch, pointer);
         }
         return false;
     }
