@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.Ship;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
+import ru.homework.pool.ExplosionPool;
 
 public class StarShip extends Ship {
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
@@ -25,13 +26,14 @@ public class StarShip extends Ship {
     protected boolean pressedUp;
     protected boolean pressedDown;
 
-    public StarShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
+    public StarShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         //TextureRegion region = atlas.findRegion("main_ship");
         //regions[0] = new TextureRegion(region, 0, 0, region.getRegionWidth() / 2, region.getRegionHeight());
         //regions[1] = new TextureRegion(region, region.getRegionWidth() / 2, 0, region.getRegionWidth(), region.getRegionHeight());
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
+        this.explosionPool = explosionPool;
 
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletHeight = 0.01f;
@@ -47,8 +49,8 @@ public class StarShip extends Ship {
         this.hp = 100;
     }
 
-    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {
-        this(atlas, bulletPool, bulletSound);
+    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
+        this(atlas, bulletPool, explosionPool, bulletSound);
         this.speed = speed;
     }
 

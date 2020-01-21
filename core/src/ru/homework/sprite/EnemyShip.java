@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.Ship;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
+import ru.homework.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
     private enum State {DESCENT, FIGHT}
@@ -14,13 +15,14 @@ public class EnemyShip extends Ship {
 
     private Vector2 descentV = new Vector2(0,-0.15f);
 
-    public EnemyShip(BulletPool enemyBulletPool, Sound enemyBulletSound, Rect worldBounds) {
+    public EnemyShip(BulletPool enemyBulletPool, ExplosionPool explosionPool, Sound enemyBulletSound, Rect worldBounds) {
         this.bulletPool = enemyBulletPool;
         this.bulletSound = enemyBulletSound;
         this.bulletV = new Vector2();
         this.v0 = new Vector2();
         this.speedV = new Vector2();
         this.worldBounds = worldBounds;
+        this.explosionPool = explosionPool;
     }
 
     public void set(

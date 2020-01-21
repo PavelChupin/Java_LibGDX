@@ -12,6 +12,7 @@ import ru.homework.base.Sprite;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
 import ru.homework.pool.EnemyShipPool;
+import ru.homework.pool.ExplosionPool;
 import ru.homework.sprite.Bullet;
 import ru.homework.sprite.EnemyShip;
 import ru.homework.sprite.Star;
@@ -28,9 +29,13 @@ public class GameScreen extends BaseScreen {
     //Пул вражеских кораблей
     private EnemyShipPool enemyShipPool;
 
+    private ExplosionPool explosionPool;
+
     private Sound enemyBulletSound;
 
     private EnemyGenerator enemyGenerator;
+
+    private Sound explosionSound;
 
     @Override
     public void show() {
@@ -44,22 +49,26 @@ public class GameScreen extends BaseScreen {
             this.sprites.add(new Star(atlas));
         }
 
+
         //Формируем звуки
         this.mainShipBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         this.enemyBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        this.explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
 
         //Формируем основной корабль
         this.bulletPool = new BulletPool();
-        this.starShip = new StarShip(atlas, bulletPool, mainShipBulletSound);
+        this.explosionPool = new ExplosionPool(atlas, explosionSound);
+        this.starShip = new StarShip(atlas, bulletPool, explosionPool, mainShipBulletSound);
         this.sprites.add(starShip);
 
         //Формируем вражеские корабли
-        this.enemyShipPool = new EnemyShipPool(bulletPool, enemyBulletSound, worldBounds);
+        this.enemyShipPool = new EnemyShipPool(bulletPool, explosionPool, enemyBulletSound, worldBounds);
         this.enemyGenerator = new EnemyGenerator(atlas, enemyShipPool, worldBounds);
     }
 
     private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveObjects();
+        explosionPool.freeAllDestroyedActiveObjects();
         enemyShipPool.freeAllDestroyedActiveObjects();
     }
 
@@ -76,14 +85,16 @@ public class GameScreen extends BaseScreen {
         for (Sprite s : sprites) {
 
             if (s instanceof StarShip && !starShip.isDestroyed()) {
-                if (!s.isDestroyed()){s.update(delta);}
+                if (!s.isDestroyed()) {
+                    s.update(delta);
+                }
             } else {
                 s.update(delta);
             }
         }
 
         bulletPool.updateActiveSprites(delta);
-
+        explosionPool.updateActiveSprites(delta);
         //Обновляем движения вражеских кораблей и пуль
         enemyShipPool.updateActiveSprites(delta);
         enemyGenerator.generate(delta);
@@ -167,12 +178,15 @@ public class GameScreen extends BaseScreen {
         //Отрисовываем все объекты
         for (Sprite s : sprites) {
             if (s instanceof StarShip) {
-                if (!s.isDestroyed()){s.draw(batch);}
+                if (!s.isDestroyed()) {
+                    s.draw(batch);
+                }
             } else {
                 s.draw(batch);
             }
         }
         bulletPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
 
         batch.end();
@@ -182,9 +196,11 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         bulletPool.dispose();
+        explosionPool.dispose();
         mainShipBulletSound.dispose();
         enemyShipPool.dispose();
         enemyBulletSound.dispose();
+        explosionSound.dispose();
     }
 
     @Override
