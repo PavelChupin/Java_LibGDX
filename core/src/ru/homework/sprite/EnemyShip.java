@@ -84,4 +84,5 @@ public class EnemyShip extends Ship {
                 || bullet.getBottom() > getTop()
                 || bullet.getTop() < pos.y);
     }
+
 }

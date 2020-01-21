@@ -12,6 +12,7 @@ import ru.homework.pool.ExplosionPool;
 
 public class StarShip extends Ship {
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
+    private static final int HP = 10;
 
     protected static final int INVALID_POINTER = -1;
 
@@ -46,7 +47,7 @@ public class StarShip extends Ship {
         this.reloadInterval = 0.25f;
         this.reloadTimer = 0f;
 
-        this.hp = 10;
+        this.hp = HP;
     }
 
     public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
@@ -61,6 +62,15 @@ public class StarShip extends Ship {
         this.worldBounds = worldBounds;
         setHeightProportion(OBJECT_SIZE_PROPORC);
         pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
+    }
+
+    @Override
+    public void setStart(){
+        this.hp = HP;
+        flushDestroy();
+        pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
+        speedV.setZero();
+        stopActionObject();
     }
 
     @Override
@@ -291,5 +301,7 @@ public class StarShip extends Ship {
                 || bullet.getBottom() > pos.y
                 || bullet.getTop() < getBottom());
     }
+
+
 
 }

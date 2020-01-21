@@ -55,12 +55,6 @@ public abstract class Ship extends Sprite {
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
     }
 
-    /*
-    @Override
-    public void resize(Rect worldBounds) {
-
-    }*/
-
     @Override
     public void update(float delta) {
 
@@ -85,6 +79,14 @@ public abstract class Ship extends Sprite {
         damageAnimateTimer = 0f;
     }
 
+    public BulletPool getBulletPool() {
+        return bulletPool;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
     protected void boom(){
         Explosion explosion = explosionPool.obtain();
         explosion.set(getHeight(),this.pos);
@@ -95,4 +97,6 @@ public abstract class Ship extends Sprite {
         super.destroy();
         boom();
     }
+
+    public void setStart(){}
 }

@@ -14,16 +14,19 @@ import ru.homework.pool.BulletPool;
 import ru.homework.pool.EnemyShipPool;
 import ru.homework.pool.ExplosionPool;
 import ru.homework.sprite.Bullet;
+import ru.homework.sprite.ButtonNewGame;
 import ru.homework.sprite.EnemyShip;
+import ru.homework.sprite.LableGameOver;
 import ru.homework.sprite.Star;
 import ru.homework.sprite.StarShip;
 import ru.homework.utils.EnemyGenerator;
 
 public class GameScreen extends BaseScreen {
 
-    private enum State {PLAYING, GAME_OVER}
+    public enum State {PLAYING, GAME_OVER}
 
-    ;
+    private ButtonNewGame buttonNewGame;
+    private LableGameOver lableGameOver;
 
     private StarShip starShip;
 
@@ -45,11 +48,19 @@ public class GameScreen extends BaseScreen {
 
     private State state;
 
+    public void setState(State state) {
+        this.state = state;
+    }
+
     @Override
     public void show() {
         super.show();
 
         this.atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+        this.state = State.PLAYING;
+
+        this.buttonNewGame = new ButtonNewGame(atlas, this);
+        this.lableGameOver = new LableGameOver(atlas);
 
         //Формируем звезды
         this.stars = new Star[64];
@@ -57,22 +68,19 @@ public class GameScreen extends BaseScreen {
             this.sprites.add(new Star(atlas));
         }
 
-
         //Формируем звуки
         this.mainShipBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         this.enemyBulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         this.explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
-
-        //Формируем основной корабль
+        //Пул пуль
         this.bulletPool = new BulletPool();
+        //Пул взрывов
         this.explosionPool = new ExplosionPool(atlas, explosionSound);
+        //Формируем основной корабль
         this.starShip = new StarShip(atlas, bulletPool, explosionPool, mainShipBulletSound);
-        //this.sprites.add(starShip);
-
         //Формируем вражеские корабли
         this.enemyShipPool = new EnemyShipPool(bulletPool, explosionPool, enemyBulletSound, worldBounds);
         this.enemyGenerator = new EnemyGenerator(atlas, enemyShipPool, worldBounds);
-        this.state = State.PLAYING;
     }
 
     private void freeAllDestroyed() {
@@ -103,6 +111,8 @@ public class GameScreen extends BaseScreen {
             //Обновляем движения вражеских кораблей и пуль
             enemyShipPool.updateActiveSprites(delta);
             enemyGenerator.generate(delta);
+        } else {
+            buttonNewGame.update(delta);
         }
     }
 
@@ -114,10 +124,16 @@ public class GameScreen extends BaseScreen {
             //Проверяем попадания пуль
             checkCollisionsBulletToShip();
 
-            if (starShip.isDestroyed()){
+            if (starShip.isDestroyed()) {
                 state = State.GAME_OVER;
+                destroyAllActiveObject();
             }
         }
+    }
+
+    private void destroyAllActiveObject() {
+        enemyShipPool.destroyAllActiveObject();
+        bulletPool.destroyAllActiveObject();
     }
 
     private void checkCollisionsShips() {
@@ -183,6 +199,8 @@ public class GameScreen extends BaseScreen {
             s.resize(worldBounds);
         }
 
+        buttonNewGame.resize(worldBounds);
+        lableGameOver.resize(worldBounds);
         starShip.resize(worldBounds);
     }
 
@@ -199,6 +217,9 @@ public class GameScreen extends BaseScreen {
             starShip.draw(batch);
             bulletPool.drawActiveSprites(batch);
             enemyShipPool.drawActiveSprites(batch);
+        } else {
+            buttonNewGame.draw(batch);
+            lableGameOver.draw(batch);
         }
         batch.end();
     }
@@ -206,18 +227,20 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        bulletPool.dispose();
-        explosionPool.dispose();
         mainShipBulletSound.dispose();
-        enemyShipPool.dispose();
         enemyBulletSound.dispose();
         explosionSound.dispose();
+        bulletPool.dispose();
+        explosionPool.dispose();
+        enemyShipPool.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             starShip.touchDown(touch, pointer, button);
+        } else {
+            buttonNewGame.touchDown(touch, pointer, button);
         }
 
         return false;
@@ -227,7 +250,11 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             starShip.touchUp(touch, pointer, button);
+        } else {
+            buttonNewGame.touchUp(touch, pointer, button);
+            starShip.setStart();
         }
+
         return false;
     }
 
