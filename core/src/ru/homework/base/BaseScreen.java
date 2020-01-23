@@ -198,4 +198,5 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         System.out.println("scrolled amount = " + amount);
         return false;
     }
+
 }

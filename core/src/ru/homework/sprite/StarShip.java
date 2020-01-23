@@ -8,9 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import ru.homework.base.Ship;
 import ru.homework.math.Rect;
 import ru.homework.pool.BulletPool;
+import ru.homework.pool.ExplosionPool;
 
 public class StarShip extends Ship {
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
+    private static final int HP = 10;
 
     protected static final int INVALID_POINTER = -1;
 
@@ -25,13 +27,14 @@ public class StarShip extends Ship {
     protected boolean pressedUp;
     protected boolean pressedDown;
 
-    public StarShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
+    public StarShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         //TextureRegion region = atlas.findRegion("main_ship");
         //regions[0] = new TextureRegion(region, 0, 0, region.getRegionWidth() / 2, region.getRegionHeight());
         //regions[1] = new TextureRegion(region, region.getRegionWidth() / 2, 0, region.getRegionWidth(), region.getRegionHeight());
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
+        this.explosionPool = explosionPool;
 
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletHeight = 0.01f;
@@ -44,11 +47,11 @@ public class StarShip extends Ship {
         this.reloadInterval = 0.25f;
         this.reloadTimer = 0f;
 
-        this.hp = 100;
+        this.hp = HP;
     }
 
-    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, Sound bulletSound) {
-        this(atlas, bulletPool, bulletSound);
+    public StarShip(TextureAtlas atlas, float speed, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
+        this(atlas, bulletPool, explosionPool, bulletSound);
         this.speed = speed;
     }
 
@@ -59,6 +62,15 @@ public class StarShip extends Ship {
         this.worldBounds = worldBounds;
         setHeightProportion(OBJECT_SIZE_PROPORC);
         pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
+    }
+
+    @Override
+    public void setStart(){
+        this.hp = HP;
+        flushDestroy();
+        pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
+        speedV.setZero();
+        stopActionObject();
     }
 
     @Override
@@ -289,5 +301,7 @@ public class StarShip extends Ship {
                 || bullet.getBottom() > pos.y
                 || bullet.getTop() < getBottom());
     }
+
+
 
 }
