@@ -48,9 +48,6 @@ public class GameScreen extends BaseScreen {
 
     private State state;
 
-    public void setState(State state) {
-        this.state = state;
-    }
 
     @Override
     public void show() {
@@ -252,7 +249,7 @@ public class GameScreen extends BaseScreen {
             starShip.touchUp(touch, pointer, button);
         } else {
             buttonNewGame.touchUp(touch, pointer, button);
-            starShip.setStart();
+            //starShip.setStart();
         }
 
         return false;
@@ -284,5 +281,8 @@ public class GameScreen extends BaseScreen {
         return false;
     }
 
-
+    public  void newGame(){
+        starShip.setStart();
+        this.state = State.PLAYING;
+    }
 }

@@ -22,6 +22,6 @@ public class ButtonNewGame extends ScaledButton {
 
     @Override
     public void action() {
-        gameScreen.setState(GameScreen.State.PLAYING);
+        gameScreen.newGame();//.setState(GameScreen.State.PLAYING);
     }
 }
