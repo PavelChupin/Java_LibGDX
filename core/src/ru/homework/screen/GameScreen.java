@@ -95,24 +95,6 @@ public class GameScreen extends BaseScreen {
         draw();
     }
 
-    private void update(float delta) {
-        for (Sprite s : sprites) {
-            s.update(delta);
-        }
-        explosionPool.updateActiveSprites(delta);
-
-        if (state == State.PLAYING) {
-            starShip.update(delta);
-            bulletPool.updateActiveSprites(delta);
-
-            //Обновляем движения вражеских кораблей и пуль
-            enemyShipPool.updateActiveSprites(delta);
-            enemyGenerator.generate(delta);
-        } else {
-            buttonNewGame.update(delta);
-        }
-    }
-
     private void checkCollisions() {
         if (state == State.PLAYING) {
             //Проверяем столкновения кораблей
@@ -214,11 +196,29 @@ public class GameScreen extends BaseScreen {
             starShip.draw(batch);
             bulletPool.drawActiveSprites(batch);
             enemyShipPool.drawActiveSprites(batch);
-        } else {
+        } else if (state == State.GAME_OVER){
             buttonNewGame.draw(batch);
             lableGameOver.draw(batch);
         }
         batch.end();
+    }
+
+    private void update(float delta) {
+        for (Sprite s : sprites) {
+            s.update(delta);
+        }
+        explosionPool.updateActiveSprites(delta);
+
+        if (state == State.PLAYING) {
+            starShip.update(delta);
+            bulletPool.updateActiveSprites(delta);
+
+            //Обновляем движения вражеских кораблей и пуль
+            enemyShipPool.updateActiveSprites(delta);
+            enemyGenerator.generate(delta);
+        } else if (state == State.GAME_OVER){
+            buttonNewGame.update(delta);
+        }
     }
 
     @Override
@@ -236,7 +236,7 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             starShip.touchDown(touch, pointer, button);
-        } else {
+        } else if (state == State.GAME_OVER){
             buttonNewGame.touchDown(touch, pointer, button);
         }
 
@@ -247,9 +247,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             starShip.touchUp(touch, pointer, button);
-        } else {
+        } else if (state == State.GAME_OVER){
             buttonNewGame.touchUp(touch, pointer, button);
-            //starShip.setStart();
         }
 
         return false;

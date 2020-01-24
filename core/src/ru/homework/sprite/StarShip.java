@@ -70,6 +70,7 @@ public class StarShip extends Ship {
         flushDestroy();
         pos.set(worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + getHalfHeight());
         speedV.setZero();
+        vectorTo.setZero();
         stopActionObject();
     }
 
@@ -117,7 +118,7 @@ public class StarShip extends Ship {
     @Override
     public boolean keyDown(int keycode) {
         //Выполняем метод нажатия кнопки
-        vectorTo.set(0, 0);
+        vectorTo.setZero();
         //frame = 1;
 
         switch (keycode) {
