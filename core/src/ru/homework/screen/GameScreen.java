@@ -177,6 +177,7 @@ public class GameScreen extends BaseScreen {
         }
     }
 
+
     private boolean isHitEnemy(Bullet bullet) {
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
         for (EnemyShip enemyShip : enemyShipList) {
