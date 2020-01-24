@@ -12,7 +12,7 @@ import ru.homework.pool.ExplosionPool;
 
 public class StarShip extends Ship {
     private static final float OBJECT_SIZE_PROPORC = 0.13f;
-    private static final int HP = 10;
+    private static final int HP = 100;
 
     protected static final int INVALID_POINTER = -1;
 
@@ -26,6 +26,7 @@ public class StarShip extends Ship {
     protected boolean pressedLeft;
     protected boolean pressedUp;
     protected boolean pressedDown;
+
 
     public StarShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);

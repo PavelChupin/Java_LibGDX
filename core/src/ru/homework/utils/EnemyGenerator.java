@@ -27,6 +27,8 @@ public class EnemyGenerator {
 
     private Rect worldBounds;
 
+    //private int level;
+
     public EnemyGenerator(TextureAtlas atlas, EnemyShipPool enemyPool, Rect worldBounds) {
         TextureRegion enemy0 = atlas.findRegion("enemy0");
         this.enemySmallRegions = Regions.split(enemy0, 1, 2, 2);
@@ -41,7 +43,9 @@ public class EnemyGenerator {
         this.worldBounds = worldBounds;
     }
 
-    public void generate(float delta) {
+    public void generate(float delta, int level) {
+        //level = level / 15 + 1;
+
         generateTimer += delta;
         if (generateTimer > generateInterval) {
             generateTimer = 0f;
@@ -53,7 +57,7 @@ public class EnemyGenerator {
                 enemyShip.set(enemySmallRegions, enemySmallV, bulletRegion,
                         EnumEnemyGenerator.ENEMY_SMALL_BULLET_HEIGHT.getValue(),
                         EnumEnemyGenerator.ENEMY_SMALL_BULLET_VY.getValue(),
-                        (int) EnumEnemyGenerator.ENEMY_SMALL_DAMAGE.getValue(),
+                        (int) EnumEnemyGenerator.ENEMY_SMALL_DAMAGE.getValue() * level,
                         EnumEnemyGenerator.ENEMY_SMALL_RELOAD_INTERVAL.getValue(),
                         (int) EnumEnemyGenerator.ENEMY_SMALL_HP.getValue(),
                         EnumEnemyGenerator.ENEMY_SMALL_HEIGHT.getValue());
@@ -61,14 +65,14 @@ public class EnemyGenerator {
                 enemyShip.set(enemyMediumRegions, enemyMediumV, bulletRegion,
                         EnumEnemyGenerator.ENEMY_MEDIUM_BULLET_HEIGHT.getValue(),
                         EnumEnemyGenerator.ENEMY_MEDIUM_BULLET_VY.getValue(),
-                        (int) EnumEnemyGenerator.ENEMY_MEDIUM_DAMAGE.getValue(),
+                        (int) EnumEnemyGenerator.ENEMY_MEDIUM_DAMAGE.getValue() * level,
                         EnumEnemyGenerator.ENEMY_MEDIUM_RELOAD_INTERVAL.getValue(),
                         (int) EnumEnemyGenerator.ENEMY_MEDIUM_HP.getValue(),
                         EnumEnemyGenerator.ENEMY_MEDIUM_HEIGHT.getValue());
             }else {enemyShip.set(enemyBigRegions, enemyBigV, bulletRegion,
                     EnumEnemyGenerator.ENEMY_BIG_BULLET_HEIGHT.getValue(),
                     EnumEnemyGenerator.ENEMY_BIG_BULLET_VY.getValue(),
-                    (int) EnumEnemyGenerator.ENEMY_BIG_DAMAGE.getValue(),
+                    (int) EnumEnemyGenerator.ENEMY_BIG_DAMAGE.getValue() * level,
                     EnumEnemyGenerator.ENEMY_BIG_RELOAD_INTERVAL.getValue(),
                     (int) EnumEnemyGenerator.ENEMY_BIG_HP.getValue(),
                     EnumEnemyGenerator.ENEMY_BIG_HEIGHT.getValue());}
@@ -81,4 +85,12 @@ public class EnemyGenerator {
 
         }
     }
+
+    /*public void setLevel(int level) {
+        this.level = level;
+    }*/
+
+    /*public int getLevel() {
+        return level;
+    }*/
 }

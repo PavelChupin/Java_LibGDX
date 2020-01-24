@@ -42,6 +42,10 @@ public abstract class Ship extends Sprite {
 
     protected Vector2 v0;
 
+    public int getHp() {
+        return hp;
+    }
+
     public Ship() {
     }
 
